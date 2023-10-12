@@ -1,4 +1,4 @@
 package model;
 
-class RollTest {
+public class RollTest {
 }

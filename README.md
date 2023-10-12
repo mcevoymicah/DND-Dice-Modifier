@@ -1,24 +1,22 @@
 
-# D&D Buff Manager
+# D&D 5E Modifier Manager
 ## An Interactive Tool for Dungeon Masters
 
 **Description:**
-The D&D Buff Manager is a Java desktop application 
-designed to help Dungeon Masters in in managing and 
-applying buffs, debuffs, and other modifiers to dice 
-rolls based on categories. From strength checks to 
-casting a spell, the tool seamlessly applies relevant 
-modifiers and provides an adjusted result, 
-ensuring an immersive and fun experience 
-for players.
+The D&D 5E Modifier Manager is a Java desktop application 
+designed to help Dungeon Masters in calculating and 
+managing modifiers in Dungeons & Dragons 5th Edition. 
+It aids players and DMs in managing ability scores, 
+their corresponding modifiers, buffs, and debuffs,
+ensuring accurate calculations and an 
+immersive gaming experience.
 
 
 **Target Audience:**
-The primary users are Dungeon Masters, especially those 
-who are looking to maintain the game's pace by quickly 
-factoring in various character buffs, spells, or 
-items when making rolls, categorized by specific 
-checks or actions.
+The primary users are D&D 5E players and Dungeon Masters 
+who want a hassle-free and efficient way to compute rolls 
+and checks, ensuring accuracy and efficiency during 
+gameplay.
 
 **Why This Project:**
 As a passionate player and Dungeon Master in Dungeons & 
@@ -28,35 +26,40 @@ to combine my passion for D&D with software design, creating
 a tool that can make the life of many Dungeon Masters easier 
 and the gaming experience more immersive.
 
+
 **Features:**
-- **Comprehensive Buff Database:** Store and manage buffs, spells, items, and abilities, categorizing them for specific checks or actions.
-- **Automated Roll Adjustment:** Calculate and display the result after applying relevant modifiers based on the selected category.
-- **Manual Roll Input:** Allow players to input a dice result, apply, and display modifiers based on the selected category.
-- **Character Profiles:** Store character-specific buffs, enabling precise roll adjustments.
-- **History & Log:** Maintain a record of rolls, showing the base result, applied modifiers, and final outcome.
-- **Category Management:** Organize rolls by pre-defined categories (e.g., strength check, stealth check, saving throws) and create custom categories as needed.
+- **Ability Score Input & Modifier Calculation:** Enter and update ability scores with automatic modifier calculation.
+- **Buff & Debuff Management:** Easily add, track, or remove active buffs and debuffs.
+- **Skill Proficiency & Checks:** Select skills, track proficiency, and incorporate their modifiers into rolls.
+- **Roll Checks: Ability & Skills** Roll for various skill and ability checks incorporating all relevant modifiers, proficiency bonuses, and buffs/debuffs.
+- **Roll History:** Maintain a record of rolls, showing the base result, applied modifiers, and final outcome.
 
 ## User Stories
 
 
 ### Adding Elements to Collections:
-1. **Adding New Buffs/Debuffs:**
-    - As a user, I want to add new buffs or debuffs to the database, specifying their effects, duration, and relevant categories.
-2. **Setting Up Character Profiles:**
-    - As a user, I want to add character profiles, adding all their inherent buffs, items, abilities, and spells for specific categories.
-3. **Creating Custom Categories:**
-    - As a user, I want to add custom categories for specific checks or actions.
+1. **Set Ability Scores:**
+    - As a user, I want to input my character's six main ability scores and receive the corresponding modifiers.
+
+2. **Add Buffs/Debuffs:**
+    - As a user, I want to add custom buffs or debuffs detailing their effects and duration.
+
+3. **Define Skills & Proficiencies:**
+    - As a user, I want to select which skills my character is proficient in, so the appropriate bonus can be applied during related checks.
 
 ### Viewing Lists:
-4. **View Buff List by Category:**
-    - As a user, I want to view a list of all buffs/debuffs sorted by category.
-5. **Review Roll History:**
-    - As a user, I want to view a list of past rolls, observing the dice result, applied buffs, final outcome, and the category.
+4. **View Ability Scores, Modifiers & Skills:**
+    - As a user, I want to see my character's ability scores, their modifiers, and the skills they're proficient in.
+
+5. **View Active Buffs/Debuffs:**
+    - As a user, I want to view a list of active buffs and debuffs with their effects and duration.
+
+6. **View Roll History:**
+    - As a user, I want to check a list of my previous rolls, sorted by type (e.g., Strength, Stealth, Athletics).
 
 ### Specific Actions:
-6. **Quick Roll by Category:**
-    - As a user, I want to select a category (e.g., attack, saving throw, custom category), then have the tool roll the dice and apply the relevant modifiers automatically.
-7. **Manual Roll Input by Category:**
-    - As a user, I want to input a dice result I made physically for a specific category, then have the tool adjust the result based on my character's relevant buffs and modifiers.
-8. **Temporary Buff Application:**
-    - As a user, I want to apply temporary buffs or conditions to my character for a specific category, adjusting rolls accordingly.
+7. **Roll for Checks:**
+    - As a user, when prompted for a skill or ability check, I want the system to consider my ability modifier, any proficiency bonus, and other relevant buffs/debuffs, then show the result.
+
+8. **Input Custom Die Result:**
+    - As a user, I want the option to input my own die result instead of relying on the system's roll.
