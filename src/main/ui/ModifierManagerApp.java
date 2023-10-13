@@ -69,31 +69,15 @@ public class ModifierManagerApp {
         character = new GameCharacter(name);
 
         System.out.println("Please create your character profile by setting your ability scores.");
-        System.out.println("Enter STRENGTH score:");
-        int strength = input.nextInt();
-        character.updateAbilityScore(AbilityType.STRENGTH, strength);
 
-        System.out.println("Enter DEXTERITY score:");
-        int dexterity = input.nextInt();
-        character.updateAbilityScore(AbilityType.DEXTERITY, dexterity);
-
-        System.out.println("Enter CONSTITUTION score:");
-        int constitution = input.nextInt();
-        character.updateAbilityScore(AbilityType.CONSTITUTION, constitution);
-
-        System.out.println("Enter INTELLIGENCE score:");
-        int intelligence = input.nextInt();
-        character.updateAbilityScore(AbilityType.INTELLIGENCE, intelligence);
-
-        System.out.println("Enter WISDOM score:");
-        int wisdom = input.nextInt();
-        character.updateAbilityScore(AbilityType.WISDOM, wisdom);
-
-        System.out.println("Enter CHARISMA score:");
-        int charisma = input.nextInt();
-        character.updateAbilityScore(AbilityType.CHARISMA, charisma);
-
+        AbilityType[] abilities = AbilityType.values();
+        for (AbilityType ability : abilities) {
+            System.out.println("Enter " + ability + " score:");
+            int score = input.nextInt();
+            character.updateAbilityScore(ability, score);
+        }
     }
+
 
     // EFFECTS: Displays the main menu
     private void displayMenu() {
@@ -108,42 +92,62 @@ public class ModifierManagerApp {
 
     // Buffs/Debuffs
 
-    // MODIFIES: character
-    // EFFECTS: Prompts the user for the details of a new buff or debuff (name, effect, duration).
-    //          Creates a new BuffDebuff object based on the user's input.
-    //          Adds the new BuffDebuff object to the character's list of active buffs and debuffs.
+
+    // MODIFIES: this, character
+    // EFFECTS: Prompts the user for the details of a new buff or debuff and
+    //          adds it to the character's active buffs/debuffs list.
     private void addBuffsDebuffs() {
-        // Prompt for buff/debuff name
-        System.out.println("Enter the name of the buff/debuff:");
-        String name = input.next();
+        String name = promptForName();
+        AbilityType effectAbility = promptForAbility();
+        int effectMagnitude = promptForEffectMagnitude();
+        int duration = promptForDuration();
 
-        // Prompt for the affected ability
-        AbilityType effectAbility = null;
-        while (effectAbility == null) {
-            System.out.println("Enter the ability affected by the buff/debuff (e.g., STRENGTH, DEXTERITY, ...):");
-            String abilityInput = input.next().toUpperCase();
-            try {
-                effectAbility = AbilityType.valueOf(abilityInput);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid ability! Please enter a valid ability.");
-            }
-        }
-
-        // Prompt for effect magnitude
-        System.out.println("Enter the magnitude of the effect (e.g., +2 or -3):");
-        int effectMagnitude = input.nextInt();
-
-        // Prompt for duration
-        System.out.println("Enter the duration (number of rounds) of the buff/debuff:");
-        int duration = input.nextInt();
-
-        // Create BuffDebuff object and add to character's list
         BuffDebuff newBuffDebuff = new BuffDebuff(name, effectAbility, effectMagnitude, duration);
         character.addBuffDebuff(newBuffDebuff);
 
         System.out.println(name + " has been added to " + character.getName() + " with a " + effectMagnitude
                 + " effect on " + effectAbility + " for " + duration + " rounds.");
     }
+
+    // EFFECTS: Prompts user for the name of the buff/debuff and returns it.
+    private String promptForName() {
+        System.out.println("Enter the name of the buff/debuff:");
+        String name = input.next();
+        input.nextLine();
+        return name;
+    }
+
+    //  EFFECTS: Prompts user for an ability affected by the buff/debuff and returns it.
+    private AbilityType promptForAbility() {
+        AbilityType effectAbility = null;
+        while (effectAbility == null) {
+            System.out.println("Select an ability from the following list affected by the buff/debuff:");
+            for (AbilityType ability : AbilityType.values()) {
+                System.out.println(ability);
+            }
+
+            String abilityInput = input.nextLine().toUpperCase();
+            try {
+                effectAbility = AbilityType.valueOf(abilityInput);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid ability! Please enter a valid ability.");
+            }
+        }
+        return effectAbility;
+    }
+
+    // EFFECTS: Prompts user for the magnitude of the effect and returns it.
+    private int promptForEffectMagnitude() {
+        System.out.println("Enter the magnitude of the effect (e.g., +2 or -3):");
+        return input.nextInt();
+    }
+
+    // EFFECTS: Prompts user for the duration of the buff/debuff and returns it.
+    private int promptForDuration() {
+        System.out.println("Enter the duration (number of rounds) of the buff/debuff:");
+        return input.nextInt();
+    }
+
 
 
     // Skills & Proficiencies
@@ -270,7 +274,6 @@ public class ModifierManagerApp {
     }
 
 
-
     // Roll for Checks
 
     // EFFECTS:  Asks the user if they are making a skill check. If "yes", proceeds with a skill check.
@@ -360,7 +363,8 @@ public class ModifierManagerApp {
     }
 
     // EFFECTS:  Returns the total modifier for a given skill, considering both the associated
-    //           ability score's modifier and a proficiency bonus if the character is proficient in the skill.
+//              ability score's modifier and a proficiency bonus if the character is proficient in the skill.
+//              Also takes into account active buffs and debuffs on the character.
     public int calculateSkillModifier(SkillType skill) {
         AbilityType associatedAbility = Skill.getAssociatedAbilityBySkill(skill);
         int abilityModifier = getModifierForAbility(associatedAbility);
@@ -368,13 +372,34 @@ public class ModifierManagerApp {
         boolean isProficient = character.isProficientInSkill(skill);
         int proficiencyBonus = isProficient ? 2 : 0; // Assuming proficiency bonus is 2 for simplicity
 
-        return abilityModifier + proficiencyBonus;
+        int buffDebuffModifier = calculateBuffDebuffModifier(associatedAbility);
+
+        return abilityModifier + proficiencyBonus + buffDebuffModifier;
     }
 
     // EFFECTS:  Returns the modifier associated with the provided ability type.
+    //           Also takes into account active buffs and debuffs on the character.
     public int calculateAbilityModifier(AbilityType ability) {
-        return getModifierForAbility(ability);
+        int abilityModifier = getModifierForAbility(ability);
+
+        int buffDebuffModifier = calculateBuffDebuffModifier(ability);
+
+        return abilityModifier + buffDebuffModifier;
     }
+
+    // EFFECTS:  Returns the cumulative modifier for the specified ability type based on active buffs and debuffs.
+    public int calculateBuffDebuffModifier(AbilityType ability) {
+        int totalModifier = 0;
+
+        for (BuffDebuff bd : character.getActiveBuffsDebuffs()) {
+            if (bd.getEffectAbility() == ability) {
+                totalModifier += bd.getEffectMagnitude();
+            }
+        }
+
+        return totalModifier;
+    }
+
 
     // EFFECTS:  Returns the modifier for the specified ability type.
     //           If the ability is not found among the character's ability scores, returns 0.
