@@ -5,8 +5,8 @@ package model;
 
 public class Skill {
 
-    private SkillType type;                       // Name of skill (eg. Stealth)
-    private AbilityScore associatedAbility;       // The associated ability score (e.g., Dexterity for Stealth)
+    private final SkillType type;                       // Name of skill (eg. Stealth)
+    private final AbilityScore associatedAbility;       // The associated ability score (e.g., Dexterity for Stealth)
     private boolean isProficient;                 //  Whether the character is proficient in the skill.
 
     // EFFECTS: constructs a skill with name, associated ability, and if the character is proficient or not
@@ -60,6 +60,7 @@ public class Skill {
 
 
     // EFFECTS: Returns the AbilityType associated with the given SkillType.
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     public static AbilityType getAssociatedAbilityBySkill(SkillType skill) {
         switch (skill) {
             case ATHLETICS:

@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public class RollHistory {
 
-    private List<Roll> rolls;            // A list of all rolls made.
+    private final List<Roll> rolls;            // A list of all rolls made.
 
     // EFFECTS: constructs an empty list of rolls made
     public RollHistory() {
-        this.rolls = new ArrayList<Roll>();
+        this.rolls = new ArrayList<>();
     }
 
     // EFFECTS: constructs a list of rolls made with the provided rolls

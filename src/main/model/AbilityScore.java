@@ -6,7 +6,7 @@ package model;
 
 public class AbilityScore {
 
-    private AbilityType type;   // Type of the ability (e.g., STRENGTH)
+    private final AbilityType type;   // Type of the ability (e.g., STRENGTH)
     private int score;          // The actual score
     private int modifier;       // The calculated modifier based on the score
 

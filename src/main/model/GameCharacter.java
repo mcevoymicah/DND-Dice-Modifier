@@ -8,10 +8,10 @@ import java.util.List;
 
 public class GameCharacter {
     private final String name;
-    private List<AbilityScore> abilityScores;       // A list of the six main ability scores.
-    private List<BuffDebuff> activeBuffsDebuffs;    // A list of currently active buffs and debuffs.
-    private List<Skill> skills;                     // A list of skills the character is proficient in.
-    private RollHistory rollHistory;                // A record of all rolls made by the character.
+    private final List<AbilityScore> abilityScores;       // A list of the six main ability scores.
+    private final List<BuffDebuff> activeBuffsDebuffs;    // A list of currently active buffs and debuffs.
+    private final List<Skill> skills;                     // A list of skills the character is proficient in.
+    private final RollHistory rollHistory;                // A record of all rolls made by the character.
 
     // EFFECTS: constructs a character with a name and initializes default lists for attributes.
     public GameCharacter(String name) {
