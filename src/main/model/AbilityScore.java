@@ -2,21 +2,21 @@ package model;
 
 public class AbilityScore {
 
-    private String name;                    // Name of the ability score (eg. Strength)
+    private AbilityType name;               // Name of the ability (eg. STRENGTH)
     private int score;                      // The actual score
     private int modifier;                   // The calculated modifier based on the score
 
     // EFFECTS: constructs an ability with name, score, and modifier.
 
-    public AbilityScore(String name, int score) {
+    public AbilityScore(AbilityType name, int score) {
         this.name = name;
         this.score = score;
         this.modifier = calculateModifier();;
     }
 
-    // getters
+    // Getters
 
-    public String getName() {
+    public AbilityType getName() {
         return this.name;
     }
 

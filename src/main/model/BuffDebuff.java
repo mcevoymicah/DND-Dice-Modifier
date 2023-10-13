@@ -13,17 +13,54 @@ public class BuffDebuff {
         this.duration = duration;
     }
 
-    // getters
+    // Getters
 
     public String getName() {
         return this.name;
     }
 
-    public int getEffect() {
+    public String getEffect() {
         return this.effect;
     }
 
     public int getDuration() {
         return this.duration;
+    }
+
+
+    // Setters
+
+    // REQUIRES: effect to be a non-empty string
+    // MODIFIES: this
+    // EFFECTS: sets the buff/debuff effect description
+    public void setEffect(String effect) {
+        this.effect = effect;
+    }
+
+    // REQUIRES: duration to be a non-negative integer
+    // MODIFIES: this
+    // EFFECTS: sets the buff/debuff duration
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+
+    // Other
+
+    // REQUIRES: rounds to be a positive integer
+    // MODIFIES: this
+    // EFFECTS: decreases the buff/debuff duration by the specified number of rounds
+    public void decrementDuration(int rounds) {
+        this.duration -= rounds;
+        if (this.duration < 0) {
+            this.duration = 0; // Ensure it doesn't go into negative values
+        }
+    }
+
+    // REQUIRES: rounds to be a positive integer
+    // MODIFIES: this
+    // EFFECTS: increases the buff/debuff duration by the specified number of rounds
+    public void incrementDuration(int rounds) {
+        this.duration += rounds;
     }
 }

@@ -21,7 +21,7 @@ public class Character {
         this.rollHistory = rollHistory;
     }
 
-    // getters
+    // Getters
 
     public String getName() {
         return this.name;
@@ -113,11 +113,11 @@ public class Character {
         // stub
     }
 
-    // EFFECTS:  Returns the most recent roll from the character's roll history.
-    public Roll getLastRoll() {
-        // stub
-        return new Roll();
-    }
+//    // EFFECTS:  Returns the most recent roll from the character's roll history.
+//    public Roll getLastRoll() {
+//        // stub
+//        return new Roll();
+//    }
 
 
     // Other

@@ -14,17 +14,19 @@ public class Skill {
         this.isProficient = isProficient;
     }
 
+}
+
     // getters
 
-    public String getName() {
-        return this.name;
-    }
+//    public String getName() {
+//        return this.name;
+//    }
 
-    public int getAssociatedAbility() {
-        return this.associatedAbility;
-    }
+//    public int getAssociatedAbility() {
+//        return this.associatedAbility;
+//    }
 
-    public int getIsProficient() {
-        return this.isProficient;
-    }
-}
+//    public int getIsProficient() {
+//        return this.isProficient;
+//    }
+//}
