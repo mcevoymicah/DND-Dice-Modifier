@@ -20,11 +20,13 @@ public class RollHistory {
         this.rolls = rolls;
     }
 
+
     // Getters
 
     public List<Roll> getRollList() {
         return this.rolls;
     }
+
 
     // Other
 

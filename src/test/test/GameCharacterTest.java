@@ -66,6 +66,27 @@ public class GameCharacterTest {
         assertEquals(-1, updatedStrengthScore);  // As there's no such score in the list
     }
 
+    @Test
+    public void testUpdateAbilityScoreMultipleNonMatchingAbilities() {
+        AbilityScore dexterity = new AbilityScore(AbilityType.DEXTERITY, 12);
+        AbilityScore intelligence = new AbilityScore(AbilityType.INTELLIGENCE, 14);
+
+        character.getAbilityScores().add(dexterity);
+        character.getAbilityScores().add(intelligence);
+
+        character.updateAbilityScore(AbilityType.CHARISMA, 16);
+
+        int updatedCharismaScore = -1;
+        for (AbilityScore ability : character.getAbilityScores()) {
+            if (ability.getType() == AbilityType.CHARISMA) {
+                updatedCharismaScore = ability.getScore();
+                break;
+            }
+        }
+
+        assertEquals(16, updatedCharismaScore); // As Charisma is not in the list
+    }
+
 
     @Test
     public void testAddBuffDebuff() {
@@ -117,6 +138,17 @@ public class GameCharacterTest {
         assertFalse(character.isProficientInSkill(SkillType.ACROBATICS));
     }
 
+    @Test
+    public void testIsProficientInSkillMultipleNonMatchingSkills() {
+        Skill athletics = new Skill(SkillType.ATHLETICS, testAbility, false);
+        Skill stealth = new Skill(SkillType.STEALTH, testAbility, false);
+
+        character.getSkills().add(athletics);
+        character.getSkills().add(stealth);
+
+        assertFalse(character.isProficientInSkill(SkillType.INVESTIGATION));
+    }
+
 
     @Test
     public void testAddRoll() {
@@ -139,6 +171,13 @@ public class GameCharacterTest {
         int expectedModifier = 0; // Should return 0 since there's no related ability score
         assertEquals(expectedModifier, character.calculateTotalModifierForSkill(SkillType.ACROBATICS));
     }
+
+    @Test
+    public void testCalculateTotalModifierForSkillWithNonExistingSkill() {
+        character.getSkills().clear();
+        assertEquals(0, character.calculateTotalModifierForSkill(SkillType.ACROBATICS));
+    }
+
 
     @Test
     public void testHasAbilityWithExistingAbility() {

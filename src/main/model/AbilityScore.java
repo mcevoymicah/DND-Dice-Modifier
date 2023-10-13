@@ -7,14 +7,14 @@ package model;
 public class AbilityScore {
 
     private final AbilityType type;   // Type of the ability (e.g., STRENGTH)
-    private int score;          // The actual score
-    private int modifier;       // The calculated modifier based on the score
+    private int score;                // The actual score
+    private int modifier;             // The calculated modifier based on the score
 
     // EFFECTS: constructs an ability with type and score.
 
     public AbilityScore(AbilityType type, int score) {
         this.type = type;
-        setScore(score);  // This automatically sets the modifier based on the score
+        setScore(score);  // Automatically sets the modifier based on the score
     }
 
     // Getters
@@ -33,7 +33,6 @@ public class AbilityScore {
 
     // Setters
 
-    // REQUIRES: score to be a positive integer
     // MODIFIES: this
     // EFFECTS:  sets the ability score and recalculates the modifier based on the score
     public void setScore(int score) {

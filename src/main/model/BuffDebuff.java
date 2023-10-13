@@ -4,7 +4,7 @@ package model;
 // Contains name, effect, and duration of the buff/debuff.
 
 public class BuffDebuff {
-    private final String name;                  // Name of the buff/debuff
+    private final String name;           // Name of the buff/debuff
     private AbilityType effectAbility;   // The ability affected by the buff/debuff
     private int effectMagnitude;         // The magnitude of the effect (e.g., +2 or -3)
     private int duration;                // How many rounds the buff/debuff lasts
@@ -18,6 +18,7 @@ public class BuffDebuff {
     }
 
     // Getters
+
     public String getName() {
         return this.name;
     }
@@ -40,14 +41,13 @@ public class BuffDebuff {
 
 
     // Setters
-    // REQUIRES: effectAbility not to be null
+
     // MODIFIES: this
     // EFFECTS: sets the ability affected by the buff/debuff
     public void setEffectAbility(AbilityType effectAbility) {
         this.effectAbility = effectAbility;
     }
 
-    // REQUIRES: magnitude to be an integer (can be positive or negative)
     // MODIFIES: this
     // EFFECTS: sets the magnitude of the effect of the buff/debuff
     public void setEffectMagnitude(int effectMagnitude) {
@@ -62,7 +62,7 @@ public class BuffDebuff {
     }
 
     // Other Methods
-    // REQUIRES: rounds to be a positive integer
+    // REQUIRES: rounds to be a non-negative integer
     // MODIFIES: this
     // EFFECTS: decreases the buff/debuff duration by the specified number of rounds
     public void decrementDuration(int rounds) {
@@ -72,7 +72,7 @@ public class BuffDebuff {
         }
     }
 
-    // REQUIRES: rounds to be a positive integer
+    // REQUIRES: rounds to be a non-negative integer
     // MODIFIES: this
     // EFFECTS: increases the buff/debuff duration by the specified number of rounds
     public void incrementDuration(int rounds) {

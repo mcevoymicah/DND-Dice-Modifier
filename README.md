@@ -55,7 +55,7 @@ and the gaming experience more immersive.
     - As a user, I want to view a list of active buffs and debuffs with their effects and duration.
 
 6. **View Roll History:**
-    - As a user, I want to check a list of my previous rolls, sorted by type (e.g., Strength, Stealth, Athletics).
+    - As a user, I want to check a list of my previous rolls with their given type and applied modifier.
 
 ### Specific Actions:
 7. **Roll for Checks:**
