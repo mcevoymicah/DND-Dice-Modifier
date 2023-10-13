@@ -1,8 +1,11 @@
-package model;
+package test;
 
+import model.AbilityType;
+import model.BuffDebuff;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class BuffDebuffTest {
 
@@ -10,20 +13,27 @@ public class BuffDebuffTest {
 
     @BeforeEach
     public void setUp() {
-        buffDebuff = new BuffDebuff("Strength Boost", "+2 to Strength checks", 5);
+        buffDebuff = new BuffDebuff("Strength Boost", AbilityType.STRENGTH, 2, 5);
     }
 
     @Test
     public void testConstructor() {
         assertEquals("Strength Boost", buffDebuff.getName());
-        assertEquals("+2 to Strength checks", buffDebuff.getEffect());
+        assertEquals(AbilityType.STRENGTH, buffDebuff.getEffectAbility());
+        assertEquals(2, buffDebuff.getEffectMagnitude());
         assertEquals(5, buffDebuff.getDuration());
     }
 
     @Test
-    public void testSetEffect() {
-        buffDebuff.setEffect("+3 to Strength checks");
-        assertEquals("+3 to Strength checks", buffDebuff.getEffect());
+    public void testSetEffectAbility() {
+        buffDebuff.setEffectAbility(AbilityType.STRENGTH);
+        assertEquals(AbilityType.STRENGTH, buffDebuff.getEffectAbility());
+    }
+
+    @Test
+    public void testSetEffectMagnitude() {
+        buffDebuff.setEffectMagnitude(3);
+        assertEquals(3, buffDebuff.getEffectMagnitude());
     }
 
     @Test

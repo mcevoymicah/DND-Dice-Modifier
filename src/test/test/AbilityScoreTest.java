@@ -1,5 +1,7 @@
-package model;
+package test;
 
+import model.AbilityScore;
+import model.AbilityType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +18,7 @@ public class AbilityScoreTest {
 
     @Test
     public void testConstructor() {
-        assertEquals(AbilityType.STRENGTH, abilityScore.getName());
+        assertEquals(AbilityType.STRENGTH, abilityScore.getType());
         assertEquals(10, abilityScore.getScore());
         assertEquals(0, abilityScore.getModifier()); // As per D&D 5E rules
     }
@@ -42,12 +44,6 @@ public class AbilityScoreTest {
         abilityScore.setScore(3);
         assertEquals(3, abilityScore.getScore());
         assertEquals(-4, abilityScore.getModifier()); // Score of 3 should have a modifier of -4.
-    }
-
-    @Test
-    public void testSetModifier() {
-        abilityScore.setModifier(-1);
-        assertEquals(-1, abilityScore.getModifier());
     }
 
     @Test

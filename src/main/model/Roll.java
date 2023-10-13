@@ -1,8 +1,12 @@
 package model;
 
+// Represents a roll made during gameplay.
+// Contains type of roll, base result, applied modifier, and the final outcome
+
+
 public class Roll {
 
-    private String type;                     // The type of roll (e.g., "Strength check", "Stealth check")
+    private final String type;               // The type of roll (e.g., "Strength check", "Stealth check")
     private int baseResult;                  // The result of the dice roll before any modifiers
     private int appliedModifier;             // The total modifier applied to the roll
     private int finalOutcome;                // The result after applying the modifier

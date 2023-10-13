@@ -1,40 +1,57 @@
 package model;
 
+// Represents a specific buff or debuff that can be applied to a character.
+// Contains name, effect, and duration of the buff/debuff.
+
 public class BuffDebuff {
-    private String name;            // Name of the buff/debuff
-    private String effect;          // Effect of the buff/debuff (e.g., "+2 to Strength checks")
-    private int duration;           // How many rounds the buff/debuff lasts
+    private final String name;                  // Name of the buff/debuff
+    private AbilityType effectAbility;   // The ability affected by the buff/debuff
+    private int effectMagnitude;         // The magnitude of the effect (e.g., +2 or -3)
+    private int duration;                // How many rounds the buff/debuff lasts
 
-    // EFFECTS: constructs a buff or debuff with name, effect, and duration.
-
-    public BuffDebuff(String name, String effect, int duration) {
+    // EFFECTS: constructs a buff or debuff with name, effect ability, magnitude, and duration.
+    public BuffDebuff(String name, AbilityType effectAbility, int effectMagnitude, int duration) {
         this.name = name;
-        this.effect = effect;
+        this.effectAbility = effectAbility;
+        this.effectMagnitude = effectMagnitude;
         this.duration = duration;
     }
 
     // Getters
-
     public String getName() {
         return this.name;
     }
 
-    public String getEffect() {
-        return this.effect;
+    public AbilityType getEffectAbility() {
+        return this.effectAbility;
+    }
+
+    public int getEffectMagnitude() {
+        return this.effectMagnitude;
     }
 
     public int getDuration() {
         return this.duration;
     }
 
+    public String getDescription() {
+        return name + " (" + effectAbility + ", " + effectMagnitude + ", Duration: " + duration + " rounds)";
+    }
+
 
     // Setters
-
-    // REQUIRES: effect to be a non-empty string
+    // REQUIRES: effectAbility not to be null
     // MODIFIES: this
-    // EFFECTS: sets the buff/debuff effect description
-    public void setEffect(String effect) {
-        this.effect = effect;
+    // EFFECTS: sets the ability affected by the buff/debuff
+    public void setEffectAbility(AbilityType effectAbility) {
+        this.effectAbility = effectAbility;
+    }
+
+    // REQUIRES: magnitude to be an integer (can be positive or negative)
+    // MODIFIES: this
+    // EFFECTS: sets the magnitude of the effect of the buff/debuff
+    public void setEffectMagnitude(int effectMagnitude) {
+        this.effectMagnitude = effectMagnitude;
     }
 
     // REQUIRES: duration to be a non-negative integer
@@ -44,9 +61,7 @@ public class BuffDebuff {
         this.duration = duration;
     }
 
-
-    // Other
-
+    // Other Methods
     // REQUIRES: rounds to be a positive integer
     // MODIFIES: this
     // EFFECTS: decreases the buff/debuff duration by the specified number of rounds

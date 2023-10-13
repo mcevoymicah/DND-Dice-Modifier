@@ -1,24 +1,30 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Character {
-    private String name;
+// Represents a player's character in D&D 5E.
+// Contains all the details of a character that are essential for modifier calculations
+
+public class GameCharacter {
+    private final String name;
     private List<AbilityScore> abilityScores;       // A list of the six main ability scores.
     private List<BuffDebuff> activeBuffsDebuffs;    // A list of currently active buffs and debuffs.
-    private List<Skill> skills;                     // A list of skills in the character is proficient in.
+    private List<Skill> skills;                     // A list of skills the character is proficient in.
     private RollHistory rollHistory;                // A record of all rolls made by the character.
 
-    // EFFECTS: constructs a character with name, ability scores, active buffs/debuffs,
-    //          skills and roll history
-
-    public Character(String name, List<AbilityScore> abilityScores, List<BuffDebuff> activeBuffsDebuffs,
-                     List<Skill> skills, RollHistory rollHistory) {
+    // EFFECTS: constructs a character with a name and initializes default lists for attributes.
+    public GameCharacter(String name) {
         this.name = name;
-        this.abilityScores = abilityScores;
-        this.activeBuffsDebuffs = activeBuffsDebuffs;
-        this.skills = skills;
-        this.rollHistory = rollHistory;
+        this.abilityScores = new ArrayList<>();
+        this.activeBuffsDebuffs = new ArrayList<>();
+        this.skills = new ArrayList<>();
+        this.rollHistory = new RollHistory();
+
+        // Initialize all ability scores with default values (e.g., 10)
+        for (AbilityType type : AbilityType.values()) {
+            this.abilityScores.add(new AbilityScore(type, 10));
+        }
     }
 
     // Getters
@@ -36,7 +42,7 @@ public class Character {
     }
 
     public List<Skill> getSkills() {
-        return null;
+        return this.skills;
     }
 
     public RollHistory getRollHistory() {
@@ -51,9 +57,13 @@ public class Character {
     // MODIFIES: this
     // EFFECTS:  Updates the specified ability score to the new value
     //           and returns true if the update was successful; false otherwise.
-    public boolean updateAbilityScore(String abilityName, int newValue) {
-        // stub
-        return false;
+    public void updateAbilityScore(AbilityType abilityType, int newScore) {
+        for (AbilityScore ability : abilityScores) {
+            if (ability.getType() == abilityType) {
+                ability.setScore(newScore);
+                break;
+            }
+        }
     }
 
 
@@ -63,20 +73,20 @@ public class Character {
     // MODIFIES: this
     // EFFECTS:  Adds the provided buff or debuff to the character's active list.
     public void addBuffDebuff(BuffDebuff buffOrDebuff) {
-        // stub
+        activeBuffsDebuffs.add(buffOrDebuff);
     }
 
     // REQUIRES: buffOrDebuff to be in the activeBuffsDebuffs list
     // MODIFIES: this
     // EFFECTS:  Removes the specified buff or debuff from the character's active list.
     public void removeBuffDebuff(BuffDebuff buffOrDebuff) {
-        // stub
+        activeBuffsDebuffs.remove(buffOrDebuff);
     }
 
     // MODIFIES: this
     // EFFECTS:  Clears all active buffs and debuffs from the character.
     public void clearBuffsDebuffs() {
-        // stub
+        activeBuffsDebuffs.clear();
     }
 
 
@@ -86,20 +96,24 @@ public class Character {
     // MODIFIES: this
     // EFFECTS:  Adds the provided skill to the character's list of skills.
     public void addSkill(Skill skill) {
-        // stub
+        skills.add(skill);
     }
 
     // REQUIRES: skill to be in the skills list
     // MODIFIES: this
     // EFFECTS:  Removes the specified skill from the character's list.
     public void removeSkill(Skill skill) {
-        // stub
+        skills.remove(skill);
     }
 
     // REQUIRES: skillName to correspond to a known skill
     // EFFECTS:  Returns true if the character is proficient in the specified skill, false otherwise.
-    public boolean isProficientInSkill(String skillName) {
-        // stub
+    public boolean isProficientInSkill(SkillType skillType) {
+        for (Skill skill : skills) {
+            if (skill.getType() == skillType && skill.getIsProficient()) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -110,14 +124,8 @@ public class Character {
     // MODIFIES: this
     // EFFECTS:  Adds the provided roll to the character's roll history.
     public void addRoll(Roll roll) {
-        // stub
+        rollHistory.addRoll(roll);
     }
-
-//    // EFFECTS:  Returns the most recent roll from the character's roll history.
-//    public Roll getLastRoll() {
-//        // stub
-//        return new Roll();
-//    }
 
 
     // Other
@@ -125,8 +133,12 @@ public class Character {
     // REQUIRES: skillName to correspond to a known skill
     // EFFECTS:  Calculates and returns the total modifier for the specified skill,
     //           considering ability scores, buffs, debuffs, and proficiencies.
-    public int calculateTotalModifierForSkill(String skillName) {
-        // stub
+    public int calculateTotalModifierForSkill(SkillType skillType) {
+        for (Skill skill : skills) {
+            if (skill.getType() == skillType) {
+                return skill.getTotalSkillModifier();
+            }
+        }
         return 0;
     }
 }
