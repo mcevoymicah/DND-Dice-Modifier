@@ -149,6 +149,14 @@ public class GameCharacterTest {
         assertFalse(character.isProficientInSkill(SkillType.INVESTIGATION));
     }
 
+    @Test
+    public void testIsProficientInSkillTypeExistsNotProficient() {
+        Skill nonProficientSkill = new Skill(SkillType.ACROBATICS, testAbility, false);
+        character.addSkill(nonProficientSkill);
+        assertFalse(character.isProficientInSkill(SkillType.ACROBATICS));
+    }
+
+
 
     @Test
     public void testAddRoll() {
