@@ -172,12 +172,19 @@ public class GameCharacterTest {
         assertEquals(expectedModifier, character.calculateTotalModifierForSkill(SkillType.ACROBATICS));
     }
 
+
+
     @Test
-    public void testCalculateTotalModifierForSkillNonExistentSkill() {
-        character.getSkills().clear();
-        int modifier = character.calculateTotalModifierForSkill(SkillType.ACROBATICS);
-        assertEquals(0, modifier);
+    public void testCalculateTotalModifierForSkillWithNoMatchingSkill() {
+        Skill athletics = new Skill(SkillType.ATHLETICS, testAbility, true);
+        Skill stealth = new Skill(SkillType.STEALTH, testAbility, true);
+
+        character.addSkill(athletics);
+        character.addSkill(stealth);
+
+        assertEquals(0, character.calculateTotalModifierForSkill(SkillType.ACROBATICS));
     }
+
 
 
     @Test
