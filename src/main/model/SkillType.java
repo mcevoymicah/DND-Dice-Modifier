@@ -1,31 +1,33 @@
 package model;
 
 public enum SkillType {
-    // Strength
-    ATHLETICS,
+    ATHLETICS(AbilityType.STRENGTH),
+    ACROBATICS(AbilityType.DEXTERITY),
+    SLEIGHT_OF_HAND(AbilityType.DEXTERITY),
+    STEALTH(AbilityType.DEXTERITY),
+    ARCANA(AbilityType.INTELLIGENCE),
+    HISTORY(AbilityType.INTELLIGENCE),
+    INVESTIGATION(AbilityType.INTELLIGENCE),
+    NATURE(AbilityType.INTELLIGENCE),
+    RELIGION(AbilityType.INTELLIGENCE),
+    ANIMAL_HANDLING(AbilityType.WISDOM),
+    INSIGHT(AbilityType.WISDOM),
+    MEDICINE(AbilityType.WISDOM),
+    PERCEPTION(AbilityType.WISDOM),
+    SURVIVAL(AbilityType.WISDOM),
+    DECEPTION(AbilityType.CHARISMA),
+    INTIMIDATION(AbilityType.CHARISMA),
+    PERFORMANCE(AbilityType.CHARISMA),
+    PERSUASION(AbilityType.CHARISMA);
 
-    // Dexterity
-    ACROBATICS,
-    SLEIGHT_OF_HAND,
-    STEALTH,
+    private final AbilityType associatedAbility;
 
-    // Intelligence
-    ARCANA,
-    HISTORY,
-    INVESTIGATION,
-    NATURE,
-    RELIGION,
+    SkillType(AbilityType associatedAbility) {
+        this.associatedAbility = associatedAbility;
+    }
 
-    // Wisdom
-    ANIMAL_HANDLING,
-    INSIGHT,
-    MEDICINE,
-    PERCEPTION,
-    SURVIVAL,
-
-    // Charisma
-    DECEPTION,
-    INTIMIDATION,
-    PERFORMANCE,
-    PERSUASION
+    public AbilityType getAssociatedAbility() {
+        return associatedAbility;
+    }
 }
+

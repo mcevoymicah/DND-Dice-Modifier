@@ -182,7 +182,6 @@ public class ModifierManagerApp {
             try {
                 chosenSkillType = SkillType.valueOf(skillInput);
             } catch (IllegalArgumentException e) {
-                System.out.println("Invalid skill! Please enter a valid skill name:");
                 skillInput = input.next().toUpperCase();
             }
         }

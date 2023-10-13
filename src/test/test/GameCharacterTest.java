@@ -173,6 +173,14 @@ public class GameCharacterTest {
     }
 
     @Test
+    public void testCalculateTotalModifierForSkillNonExistentSkill() {
+        character.getSkills().clear();
+        int modifier = character.calculateTotalModifierForSkill(SkillType.ACROBATICS);
+        assertEquals(0, modifier);
+    }
+
+
+    @Test
     public void testCalculateTotalModifierForSkillWithNonExistingSkill() {
         character.getSkills().clear();
         assertEquals(0, character.calculateTotalModifierForSkill(SkillType.ACROBATICS));

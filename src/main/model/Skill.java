@@ -61,19 +61,8 @@ public class Skill {
 
     // EFFECTS: Returns the AbilityType associated with the given SkillType.
     public static AbilityType getAssociatedAbilityBySkill(SkillType skill) {
-        switch (skill) {
-            case ATHLETICS:
-                return AbilityType.STRENGTH;
-            case ACROBATICS: case SLEIGHT_OF_HAND: case STEALTH:
-                return AbilityType.DEXTERITY;
-            case ARCANA: case HISTORY: case INVESTIGATION: case NATURE: case RELIGION:
-                return AbilityType.INTELLIGENCE;
-            case ANIMAL_HANDLING: case INSIGHT: case MEDICINE: case PERCEPTION: case SURVIVAL:
-                return AbilityType.WISDOM;
-            case DECEPTION: case INTIMIDATION: case PERFORMANCE: case PERSUASION:
-                return AbilityType.CHARISMA;
-        }
-        return null;
+        return skill.getAssociatedAbility();
     }
+
 }
 
