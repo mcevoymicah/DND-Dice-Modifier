@@ -15,7 +15,6 @@ public class GameCharacterTest {
     private BuffDebuff testBuff;
     private Skill testSkill;
     private Roll testRoll;
-    private RollHistory testRollHistory;
 
     @BeforeEach
     public void setup() {
@@ -23,12 +22,18 @@ public class GameCharacterTest {
         testBuff = new BuffDebuff("Strength Boost", AbilityType.STRENGTH, 2, 5);
         testSkill = new Skill(SkillType.ACROBATICS, testAbility, true);
         testRoll = new Roll("Test Roll", 20, 5);
-        testRollHistory = new RollHistory(new ArrayList<>());
+        RollHistory testRollHistory = new RollHistory(new ArrayList<>());
 
         character = new GameCharacter("TestChar");
 
 
     }
+
+    @Test
+    public void testGetName() {
+        assertEquals("TestChar", character.getName());
+    }
+
 
     @Test
     public void testUpdateAbilityScoreValid() {
@@ -43,6 +48,22 @@ public class GameCharacterTest {
         }
 
         assertEquals(15, updatedStrengthScore);
+    }
+
+    @Test
+    public void testUpdateNonExistingAbilityScore() {
+        character.getAbilityScores().clear();
+        character.updateAbilityScore(AbilityType.STRENGTH, 15);
+
+        int updatedStrengthScore = -1;
+        for (AbilityScore ability : character.getAbilityScores()) {
+            if (ability.getType() == AbilityType.STRENGTH) {
+                updatedStrengthScore = ability.getScore();
+                break;
+            }
+        }
+
+        assertEquals(-1, updatedStrengthScore);  // As there's no such score in the list
     }
 
 
@@ -91,6 +112,13 @@ public class GameCharacterTest {
     }
 
     @Test
+    public void testIsProficientInSkillWithEmptySkills() {
+        character.getSkills().clear();
+        assertFalse(character.isProficientInSkill(SkillType.ACROBATICS));
+    }
+
+
+    @Test
     public void testAddRoll() {
         character.addRoll(testRoll);
         assertTrue(character.getRollHistory().getRollList().contains(testRoll));
@@ -103,5 +131,46 @@ public class GameCharacterTest {
         int expectedModifier = testSkill.getTotalSkillModifier() + testAbility.getModifier();
         assertEquals(expectedModifier, character.calculateTotalModifierForSkill(SkillType.ACROBATICS));
     }
+
+    @Test
+    public void testCalculateTotalModifierForSkillWithoutRelatedAbility() {
+        character.getAbilityScores().clear();  // Removing all ability scores
+        character.addSkill(testSkill);
+        int expectedModifier = 0; // Should return 0 since there's no related ability score
+        assertEquals(expectedModifier, character.calculateTotalModifierForSkill(SkillType.ACROBATICS));
+    }
+
+    @Test
+    public void testHasAbilityWithExistingAbility() {
+        character.getAbilityScores().add(testAbility);
+        assertTrue(character.hasAbility(AbilityType.STRENGTH));
+    }
+
+    @Test
+    public void testHasAbilityWithNonExistingAbility() {
+        character.getAbilityScores().clear();
+        assertFalse(character.hasAbility(AbilityType.STRENGTH));
+    }
+
+    @Test
+    public void testHasAbilityWithMultipleAbilities() {
+        AbilityScore dexterity = new AbilityScore(AbilityType.DEXTERITY, 12);
+        AbilityScore intelligence = new AbilityScore(AbilityType.INTELLIGENCE, 14);
+
+        character.getAbilityScores().add(testAbility);
+        character.getAbilityScores().add(dexterity);
+        character.getAbilityScores().add(intelligence);
+
+        assertTrue(character.hasAbility(AbilityType.STRENGTH));
+        assertTrue(character.hasAbility(AbilityType.DEXTERITY));
+        assertTrue(character.hasAbility(AbilityType.INTELLIGENCE));
+    }
+
+    @Test
+    public void testHasAbilityWithEmptyAbilities() {
+        character.getAbilityScores().clear();
+        assertFalse(character.hasAbility(AbilityType.STRENGTH));
+    }
+
 }
 

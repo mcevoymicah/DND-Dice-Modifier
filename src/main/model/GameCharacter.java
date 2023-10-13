@@ -130,16 +130,32 @@ public class GameCharacter {
 
     // Other
 
-    // REQUIRES: skillName to correspond to a known skill
     // EFFECTS:  Calculates and returns the total modifier for the specified skill,
     //           considering ability scores, buffs, debuffs, and proficiencies.
     public int calculateTotalModifierForSkill(SkillType skillType) {
         for (Skill skill : skills) {
             if (skill.getType() == skillType) {
+                // If the character doesn't have the associated ability score,
+                // return 0 regardless of proficiency status
+                if (!this.hasAbility(skill.getAssociatedAbility().getType())) {
+                    return 0;
+                }
+
                 return skill.getTotalSkillModifier();
             }
         }
         return 0;
     }
+
+    // EFFECTS: Checks if the character has the given ability
+    public boolean hasAbility(AbilityType abilityType) {
+        for (AbilityScore ability : abilityScores) {
+            if (ability.getType() == abilityType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 

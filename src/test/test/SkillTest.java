@@ -49,4 +49,44 @@ public class SkillTest {
         String expectedDescription = "STEALTH (Associated with DEXTERITY): Proficient";
         assertEquals(expectedDescription, stealthSkill.describeSkill());
     }
+
+    @Test
+    public void testDescribeSkillNotProficient() {
+        stealthSkill.setProficiency(false);
+        String expectedDescription = "STEALTH (Associated with DEXTERITY): Not proficient";
+        assertEquals(expectedDescription, stealthSkill.describeSkill());
+    }
+
+    @Test
+    public void testGetAssociatedAbilityBySkill() {
+        // Test for Strength-associated skills
+        assertEquals(AbilityType.STRENGTH, Skill.getAssociatedAbilityBySkill(SkillType.ATHLETICS));
+
+        // Test for Dexterity-associated skills
+        assertEquals(AbilityType.DEXTERITY, Skill.getAssociatedAbilityBySkill(SkillType.ACROBATICS));
+        assertEquals(AbilityType.DEXTERITY, Skill.getAssociatedAbilityBySkill(SkillType.SLEIGHT_OF_HAND));
+        assertEquals(AbilityType.DEXTERITY, Skill.getAssociatedAbilityBySkill(SkillType.STEALTH));
+
+        // Test for Intelligence-associated skills
+        assertEquals(AbilityType.INTELLIGENCE, Skill.getAssociatedAbilityBySkill(SkillType.ARCANA));
+        assertEquals(AbilityType.INTELLIGENCE, Skill.getAssociatedAbilityBySkill(SkillType.HISTORY));
+        assertEquals(AbilityType.INTELLIGENCE, Skill.getAssociatedAbilityBySkill(SkillType.INVESTIGATION));
+        assertEquals(AbilityType.INTELLIGENCE, Skill.getAssociatedAbilityBySkill(SkillType.NATURE));
+        assertEquals(AbilityType.INTELLIGENCE, Skill.getAssociatedAbilityBySkill(SkillType.RELIGION));
+
+        // Test for Wisdom-associated skills
+        assertEquals(AbilityType.WISDOM, Skill.getAssociatedAbilityBySkill(SkillType.ANIMAL_HANDLING));
+        assertEquals(AbilityType.WISDOM, Skill.getAssociatedAbilityBySkill(SkillType.INSIGHT));
+        assertEquals(AbilityType.WISDOM, Skill.getAssociatedAbilityBySkill(SkillType.MEDICINE));
+        assertEquals(AbilityType.WISDOM, Skill.getAssociatedAbilityBySkill(SkillType.PERCEPTION));
+        assertEquals(AbilityType.WISDOM, Skill.getAssociatedAbilityBySkill(SkillType.SURVIVAL));
+
+        // Test for Charisma-associated skills
+        assertEquals(AbilityType.CHARISMA, Skill.getAssociatedAbilityBySkill(SkillType.DECEPTION));
+        assertEquals(AbilityType.CHARISMA, Skill.getAssociatedAbilityBySkill(SkillType.INTIMIDATION));
+        assertEquals(AbilityType.CHARISMA, Skill.getAssociatedAbilityBySkill(SkillType.PERFORMANCE));
+        assertEquals(AbilityType.CHARISMA, Skill.getAssociatedAbilityBySkill(SkillType.PERSUASION));
+    }
+
+
 }

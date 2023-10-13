@@ -59,4 +59,11 @@ public class BuffDebuffTest {
         buffDebuff.decrementDuration(10);
         assertEquals(0, buffDebuff.getDuration());
     }
+
+    @Test
+    public void testGetDescription() {
+        String expectedDescription = "Strength Boost (STRENGTH, 2, Duration: 5 rounds)";
+        assertEquals(expectedDescription, buffDebuff.getDescription());
+    }
+
 }
