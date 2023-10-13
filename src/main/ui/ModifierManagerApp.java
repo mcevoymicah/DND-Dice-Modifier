@@ -5,8 +5,16 @@ import model.*;
 import java.util.List;
 import java.util.Scanner;
 
+// This class represents the main UI for managing character modifiers in a Dungeons & Dragons 5th Edition game.
 
-// D&D 5E Modifier Manager Application
+// The application allows users to:
+//         Initialize a new game character with ability scores
+//         Add buffs and debuffs to the character
+//         Define character's skills and proficiencies
+//         View the character's details including ability scores, active buffs/debuffs, skills, and recent roll history
+//         Make skill and ability checks, simulating dice rolls with the option of manual input or automatic dice roll
+
+
 public class ModifierManagerApp {
     private GameCharacter character;
     private final Scanner input;

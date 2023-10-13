@@ -45,7 +45,7 @@ and the gaming experience more immersive.
     - As a user, I want to add custom buffs or debuffs detailing their effects and duration.
 
 3. **Define Skills & Proficiencies:**
-    - As a user, I want to select which skills my character is proficient in, so the appropriate bonus can be applied during related checks.
+    - As a user, I want to select which skills my character is proficient in
 
 ### Viewing Lists:
 4. **View Ability Scores, Modifiers & Skills:**

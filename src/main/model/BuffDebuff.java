@@ -61,7 +61,8 @@ public class BuffDebuff {
         this.duration = duration;
     }
 
-    // Other Methods
+    // Other
+
     // REQUIRES: rounds to be a non-negative integer
     // MODIFIES: this
     // EFFECTS: decreases the buff/debuff duration by the specified number of rounds
