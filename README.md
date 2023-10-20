@@ -63,3 +63,10 @@ and the gaming experience more immersive.
 
 8. **Input Custom Die Result:**
     - As a user, I want the option to input my own die result instead of relying on the system's roll.
+
+### Data Persistence:
+9. **Save Character:**
+    - As a user, when I select the quit option from the application menu, I want to be reminded to save my character to file and have the option to do so or not.
+
+10. **Save Character:**
+    - As a user, when I start the application, I want to be given the option to load my character from file.
