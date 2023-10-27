@@ -16,6 +16,7 @@ import java.io.*;
 //         Define character's skills and proficiencies
 //         View the character's details including ability scores, active buffs/debuffs, skills, and recent roll history
 //         Make skill and ability checks, simulating dice rolls with the option of manual input or automatic dice roll
+//         Save a character and load a previous character
 
 
 public class ModifierManagerApp {

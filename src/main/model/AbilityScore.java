@@ -63,5 +63,4 @@ public class AbilityScore {
         return json;
     }
 
-
 }
