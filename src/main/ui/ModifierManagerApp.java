@@ -32,7 +32,6 @@ public class ModifierManagerApp {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         offerCharacterLoad();
-        runManager();
     }
 
 
@@ -433,7 +432,7 @@ public class ModifierManagerApp {
     }
 
 
-    // Quitting
+    // Save/Loading
 
     // EFFECTS: Asks the user if they would like to save their character before quitting.
     //          If user responds with "yes", the character is saved to file. Otherwise, does nothing.
@@ -467,7 +466,7 @@ public class ModifierManagerApp {
         if (response.equals("yes")) {
             loadCharacter();
         } else {
-            initCharacter();
+            runManager();
         }
     }
 
@@ -478,6 +477,13 @@ public class ModifierManagerApp {
         try {
             character = jsonReader.read();
             System.out.println("Loaded " + character.getName() + " from " + JSON_STORE);
+
+            boolean keepGoing = true;
+            while (keepGoing) {
+                displayMenu();
+                String command = input.next().toLowerCase();
+                keepGoing = executeMenuCommand(command);
+            }
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
             initCharacter();

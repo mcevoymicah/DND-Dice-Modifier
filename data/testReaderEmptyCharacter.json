@@ -2,5 +2,8 @@
   "abilityScores": [],
   "activeBuffsDebuffs": [],
   "skills": [],
-  "name": "John Doe"
+  "name": "John Doe",
+  "rollHistory": {
+    "rolls": []
+  }
 }

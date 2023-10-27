@@ -14,13 +14,33 @@
     {
       "type": "ATHLETICS",
       "isProficient": true,
-      "associatedAbility": "STRENGTH"
+      "associatedAbility": {
+        "type": "STRENGTH"
+      }
     },
     {
       "type": "ACROBATICS",
       "isProficient": false,
-      "associatedAbility": "DEXTERITY"
+      "associatedAbility": {
+        "type": "DEXTERITY"
+      }
     }
   ],
-  "name": "John Doe"
+  "name": "John Doe",
+  "rollHistory": {
+    "rolls": [
+      {
+        "type": "Strength check",
+        "baseResult": 10,
+        "appliedModifier": 5,
+        "finalOutcome": 15
+      },
+      {
+        "type": "Dexterity save",
+        "baseResult": 8,
+        "appliedModifier": 4,
+        "finalOutcome": 12
+      }
+    ]
+  }
 }

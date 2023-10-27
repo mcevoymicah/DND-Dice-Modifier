@@ -1,10 +1,6 @@
 package persistence;
 
-import model.AbilityScore;
-import model.AbilityType;
-import model.GameCharacter;
-import model.Skill;
-import model.SkillType;
+import model.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -28,5 +24,13 @@ public class JsonTest {
         assertEquals(expected.getAbilityScores().size(), actual.getAbilityScores().size());
         assertEquals(expected.getSkills().size(), actual.getSkills().size());
         assertEquals(expected.getActiveBuffsDebuffs().size(), actual.getActiveBuffsDebuffs().size());
+    }
+
+    // Helper method to validate RollHistory contents
+    protected void checkRoll(String type, int baseResult, int appliedModifier, int finalOutcome, Roll roll) {
+        assertEquals(type, roll.getType());
+        assertEquals(baseResult, roll.getBaseResult());
+        assertEquals(appliedModifier, roll.getAppliedModifier());
+        assertEquals(finalOutcome, roll.getFinalOutcome());
     }
 }

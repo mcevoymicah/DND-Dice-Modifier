@@ -29,6 +29,7 @@ class JsonReaderTest extends JsonTest {
             checkGameCharacter("John Doe", character, character);
             assertTrue(character.getActiveBuffsDebuffs().isEmpty());
             assertTrue(character.getSkills().isEmpty());
+            assertTrue(character.getRollHistory().getRollList().isEmpty()); // check for an empty roll history
         } catch (IOException e) {
             fail("Couldn't read from file");
         }
@@ -51,8 +52,17 @@ class JsonReaderTest extends JsonTest {
             checkSkill(SkillType.ATHLETICS, true, skills.get(0));
             checkSkill(SkillType.ACROBATICS, false, skills.get(1));
 
+            List<Roll> rolls = character.getRollHistory().getRollList();
+            assertEquals(2, rolls.size());
+            checkRoll("Strength check", 10, 5, 15, rolls.get(0));
+            checkRoll("Dexterity save", 8, 4, 12, rolls.get(1));
+
         } catch (IOException e) {
             fail("Couldn't read from file");
         }
+
     }
+
 }
+
+

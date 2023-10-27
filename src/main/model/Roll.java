@@ -70,6 +70,8 @@ public class Roll {
                 + appliedModifier + ". Final result: " + finalOutcome;
     }
 
+
+
     // Code influence by the JsonSerializationDemo
     // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 

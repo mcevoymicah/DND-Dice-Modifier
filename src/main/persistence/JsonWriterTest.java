@@ -1,7 +1,6 @@
 package persistence;
 
-import model.GameCharacter;
-import model.AbilityType;
+import model.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,7 +12,7 @@ class JsonWriterTest extends JsonTest {
     @Test
     void testWriterInvalidFile() {
         try {
-            GameCharacter character = new GameCharacter("John Doe");
+            GameCharacter character = new GameCharacter("Jane Doe");
             JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
             writer.open();
             fail("IOException was expected");
@@ -28,6 +27,7 @@ class JsonWriterTest extends JsonTest {
             GameCharacter character = new GameCharacter("John Doe");
             // Clear default ability scores to ensure character is truly "empty"
             character.getAbilityScores().clear();
+            character.getRollHistory().clearRollHistory();
 
             JsonWriter writer = new JsonWriter("./data/testWriterEmptyCharacter.json");
             writer.open();
@@ -39,6 +39,7 @@ class JsonWriterTest extends JsonTest {
             checkGameCharacter("John Doe", character, character);
             assertTrue(character.getActiveBuffsDebuffs().isEmpty());
             assertTrue(character.getSkills().isEmpty());
+            assertTrue(character.getRollHistory().getRollList().isEmpty());
 
         } catch (IOException e) {
             fail("Exception should not have been thrown");
@@ -50,7 +51,8 @@ class JsonWriterTest extends JsonTest {
         try {
             GameCharacter character = new GameCharacter("John Doe");
             character.updateAbilityScore(AbilityType.STRENGTH, 15);
-            // You can add more attributes like skills, buffs/debuffs etc.
+            Roll sampleRoll = new Roll("Test Roll", 10, 2);
+            character.getRollHistory().addRoll(sampleRoll);
 
             JsonWriter writer = new JsonWriter("./data/testWriterGeneralCharacter.json");
             writer.open();
@@ -62,8 +64,16 @@ class JsonWriterTest extends JsonTest {
             checkGameCharacter("John Doe", character, character);
             checkAbilityScore(AbilityType.STRENGTH, 15, character.getAbilityScoreByType(AbilityType.STRENGTH));
 
+            // Check roll history
+            Roll readRoll = character.getRollHistory().getLastRoll();
+            checkRoll(sampleRoll.getType(), sampleRoll.getBaseResult(), sampleRoll.getAppliedModifier(),
+                    sampleRoll.getFinalOutcome(), readRoll);
+
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
     }
+
 }
+
+

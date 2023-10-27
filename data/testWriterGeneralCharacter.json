@@ -1,6 +1,11 @@
 {
     "skills": [],
-    "rollHistory": {"rolls": []},
+    "rollHistory": {"rolls": [{
+        "baseResult": 10,
+        "appliedModifier": 2,
+        "finalOutcome": 12,
+        "type": "Test Roll"
+    }]},
     "name": "John Doe",
     "activeBuffsDebuffs": [],
     "abilityScores": [
