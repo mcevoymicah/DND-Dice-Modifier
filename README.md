@@ -47,7 +47,7 @@ and the gaming experience more immersive.
 3. **Define Skills & Proficiencies:**
     - As a user, I want to select which skills my character is proficient in
 
-### Viewing Lists:
+### Viewing Li sts:
 4. **View Ability Scores, Modifiers & Skills:**
     - As a user, I want to see my character's ability scores, their modifiers, and the skills they're proficient in.
 
@@ -68,5 +68,5 @@ and the gaming experience more immersive.
 9. **Save Character:**
     - As a user, when I select the quit option from the application menu, I want to be reminded to save my character to file and have the option to do so or not.
 
-10. **Save Character:**
+10. **Load Character:**
     - As a user, when I start the application, I want to be given the option to load my character from file.

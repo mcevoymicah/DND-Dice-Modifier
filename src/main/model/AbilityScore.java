@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // Represents one of the six main ability scores in D&D 5E.
 // Contains details about the ability's type, its base value,
 // and provides methods to calculate the modifier based on the score.
@@ -31,6 +33,7 @@ public class AbilityScore {
         return this.modifier;
     }
 
+
     // Setters
 
     // MODIFIES: this
@@ -49,5 +52,16 @@ public class AbilityScore {
     public String displayAsString() {
         return type + ": " + score + " (Modifier: " + modifier + ")";
     }
+
+    // Code influence by the JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("type", type.toString());
+        json.put("score", score);
+        json.put("modifier", modifier);
+        return json;
+    }
+
 
 }

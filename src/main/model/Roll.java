@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // Represents a roll made during gameplay.
 // Contains type of roll, base result, applied modifier, and the final outcome
 
@@ -67,5 +69,18 @@ public class Roll {
         return type + ": Rolled a " + baseResult + " with a modifier of "
                 + appliedModifier + ". Final result: " + finalOutcome;
     }
+
+    // Code influence by the JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("type", type);
+        json.put("baseResult", baseResult);
+        json.put("appliedModifier", appliedModifier);
+        json.put("finalOutcome", finalOutcome);
+        return json;
+    }
+
 
 }

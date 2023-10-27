@@ -1,9 +1,12 @@
 package ui;
 
 import model.*;
+import persistence.*;
 
 import java.util.List;
 import java.util.Scanner;
+
+import java.io.*;
 
 // This class represents the main UI for managing character modifiers in a Dungeons & Dragons 5th Edition game.
 
@@ -18,12 +21,20 @@ import java.util.Scanner;
 public class ModifierManagerApp {
     private GameCharacter character;
     private final Scanner input;
+    private static final String JSON_STORE = "./data/character.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+
 
     // EFFECTS: runs the D&D Modifier Manager application
     public ModifierManagerApp() {
         input = new Scanner(System.in);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+        offerCharacterLoad();
         runManager();
     }
+
 
     // MODIFIES: this
     // EFFECTS: processes user input, displays menu, gets user command,
@@ -60,7 +71,9 @@ public class ModifierManagerApp {
                 rollForChecks();
                 return true;
             case "q":
+                offerCharacterSave();
                 return false;
+
             default:
                 System.out.println("Selection not valid...");
                 return true;
@@ -96,7 +109,6 @@ public class ModifierManagerApp {
         System.out.println("\tr -> Roll for Checks");
         System.out.println("\tq -> Quit");
     }
-
 
     // Buffs/Debuffs
 
@@ -371,8 +383,8 @@ public class ModifierManagerApp {
     }
 
     // EFFECTS:  Returns the total modifier for a given skill, considering both the associated
-//              ability score's modifier and a proficiency bonus if the character is proficient in the skill.
-//              Also takes into account active buffs and debuffs on the character.
+    //           ability score's modifier and a proficiency bonus if the character is proficient in the skill.
+    //           Also takes into account active buffs and debuffs on the character.
     public int calculateSkillModifier(SkillType skill) {
         AbilityType associatedAbility = Skill.getAssociatedAbilityBySkill(skill);
         int abilityModifier = getModifierForAbility(associatedAbility);
@@ -418,6 +430,58 @@ public class ModifierManagerApp {
             }
         }
         return 0;
+    }
+
+
+    // Quitting
+
+    // EFFECTS: Asks the user if they would like to save their character before quitting.
+    //          If user responds with "yes", the character is saved to file. Otherwise, does nothing.
+    private void offerCharacterSave() {
+        System.out.println("Would you like to save your character before quitting? (yes/no)");
+        String response = input.next().toLowerCase();
+        if (response.equals("yes")) {
+            saveCharacter();
+        }
+    }
+
+    // MODIFIES: This, the file specified by JSON_STORE
+    // EFFECTS: Attempts to save character to file. If successful, a message indicating success is printed.
+    private void saveCharacter() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(character);
+            jsonWriter.close();
+            System.out.println("Saved " + character.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // EFFECTS: Asks the user if they would like to load a character from a file.
+    //          If user responds with "yes", attempts to load a character from file.
+    //          Otherwise, initializes a new character.
+    private void offerCharacterLoad() {
+        System.out.println("Would you like to load a character? (yes/no)");
+        String response = input.next().toLowerCase();
+        if (response.equals("yes")) {
+            loadCharacter();
+        } else {
+            initCharacter();
+        }
+    }
+
+    // MODIFIES: This
+    // EFFECTS: Attempts to load character from file. If successful, a message indicating success is printed.
+    //          If unsuccessful, a message indicating failure is printed, and a new character is initialized.
+    private void loadCharacter() {
+        try {
+            character = jsonReader.read();
+            System.out.println("Loaded " + character.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+            initCharacter();
+        }
     }
 
 }

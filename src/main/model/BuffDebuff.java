@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // Represents a specific buff or debuff that can be applied to a character.
 // Contains name, effect, and duration of the buff/debuff.
 
@@ -79,4 +81,17 @@ public class BuffDebuff {
     public void incrementDuration(int rounds) {
         this.duration += rounds;
     }
+
+    // Code influence by the JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("effectAbility", effectAbility.toString());
+        json.put("effectMagnitude", effectMagnitude);
+        json.put("duration", duration);
+        return json;
+    }
+
 }

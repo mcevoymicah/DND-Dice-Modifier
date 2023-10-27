@@ -1,0 +1,38 @@
+{
+    "skills": [],
+    "rollHistory": {"rolls": []},
+    "name": "John Doe",
+    "activeBuffsDebuffs": [],
+    "abilityScores": [
+        {
+            "score": 15,
+            "modifier": 2,
+            "type": "STRENGTH"
+        },
+        {
+            "score": 10,
+            "modifier": 0,
+            "type": "DEXTERITY"
+        },
+        {
+            "score": 10,
+            "modifier": 0,
+            "type": "CONSTITUTION"
+        },
+        {
+            "score": 10,
+            "modifier": 0,
+            "type": "INTELLIGENCE"
+        },
+        {
+            "score": 10,
+            "modifier": 0,
+            "type": "WISDOM"
+        },
+        {
+            "score": 10,
+            "modifier": 0,
+            "type": "CHARISMA"
+        }
+    ]
+}

@@ -2,6 +2,8 @@ package model;
 
 import java.util.List;
 import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 // Represents a collection of rolls made during the game.
 // Can add, remove, and view roll history.
@@ -55,6 +57,26 @@ public class RollHistory {
     // EFFECTS: removes the given roll from the roll history
     public void removeRoll(Roll roll) {
         rolls.remove(roll);
+    }
+
+    // Code influence by the JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("rolls", rollsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns rolls in this history as a JSON array
+    private JSONArray rollsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Roll r : rolls) {
+            jsonArray.put(r.toJson());
+        }
+
+        return jsonArray;
     }
 }
 

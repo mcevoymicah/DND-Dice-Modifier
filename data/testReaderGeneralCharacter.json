@@ -1,0 +1,26 @@
+{
+  "abilityScores": [
+    {
+      "type": "STRENGTH",
+      "score": 15
+    },
+    {
+      "type": "DEXTERITY",
+      "score": 12
+    }
+  ],
+  "activeBuffsDebuffs": [],
+  "skills": [
+    {
+      "type": "ATHLETICS",
+      "isProficient": true,
+      "associatedAbility": "STRENGTH"
+    },
+    {
+      "type": "ACROBATICS",
+      "isProficient": false,
+      "associatedAbility": "DEXTERITY"
+    }
+  ],
+  "name": "John Doe"
+}

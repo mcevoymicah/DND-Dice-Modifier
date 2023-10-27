@@ -2,6 +2,9 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 
 // Represents a player's character in D&D 5E.
 // Contains all the details of a character that are essential for modifier calculations
@@ -66,6 +69,17 @@ public class GameCharacter {
         }
     }
 
+    // REQUIRES: The given AbilityType to be a non-null valid type from the AbilityType enumeration.
+    // EFFECTS: Returns the AbilityScore object corresponding to the given AbilityType.
+    //          Returns null if no such AbilityScore exists for the character.
+    public AbilityScore getAbilityScoreByType(AbilityType type) {
+        for (AbilityScore score : abilityScores) {
+            if (score.getType() == type) {
+                return score;
+            }
+        }
+        return null;
+    }
 
     // Buffs and Debuffs
 
@@ -156,6 +170,45 @@ public class GameCharacter {
         }
         return false;
     }
+
+    // Code influence by the JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("abilityScores", abilityScoresToJson());
+        json.put("activeBuffsDebuffs", buffsDebuffsToJson());
+        json.put("skills", skillsToJson());
+        json.put("rollHistory", rollHistory.toJson()); // Assuming rollHistory also has a toJson method
+        return json;
+    }
+
+    private JSONArray abilityScoresToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (AbilityScore score : abilityScores) {
+            jsonArray.put(score.toJson());
+        }
+        return jsonArray;
+    }
+
+    private JSONArray buffsDebuffsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (BuffDebuff buffDebuff : activeBuffsDebuffs) {
+            jsonArray.put(buffDebuff.toJson());
+        }
+        return jsonArray;
+    }
+
+    private JSONArray skillsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Skill skill : skills) {
+            jsonArray.put(skill.toJson());
+        }
+        return jsonArray;
+    }
+
 
 }
 

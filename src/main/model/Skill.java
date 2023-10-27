@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // Represents a specific skill in the D&D 5E universe.
 // Contains skill's type, associated ability, and character's proficiency in that skill.
 
@@ -59,9 +61,20 @@ public class Skill {
     }
 
 
+    // Code influence by the JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+
     // EFFECTS: Returns the AbilityType associated with the given SkillType.
     public static AbilityType getAssociatedAbilityBySkill(SkillType skill) {
         return skill.getAssociatedAbility();
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("type", type.toString());
+        json.put("associatedAbility", associatedAbility.toJson());
+        json.put("isProficient", isProficient);
+        return json;
     }
 
 }
