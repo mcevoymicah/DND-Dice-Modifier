@@ -86,6 +86,21 @@ class JsonReaderTest extends JsonTest {
         }
     }
 
+    @Test
+    void testReaderCharacterWithoutRollHistory() {
+        JsonReader reader = new JsonReader("./data/testReaderCharacterWithBuffsDebuffs.json");
+        try {
+            GameCharacter character = reader.read();
+            checkGameCharacter("John Buffed", character, character);
+
+            assertTrue(character.getRollHistory().getRollList().isEmpty());
+
+        } catch (IOException e) {
+            fail("Couldn't read from file");
+        }
+    }
+
+
 
 }
 
