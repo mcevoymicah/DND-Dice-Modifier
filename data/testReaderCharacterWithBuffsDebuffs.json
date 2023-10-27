@@ -1,0 +1,16 @@
+{
+  "name": "John Buffed",
+  "abilityScores": [],
+  "skills": [],
+  "activeBuffsDebuffs": [
+    {
+      "name": "Strength Buff",
+      "effectAbility": "STRENGTH",
+      "effectMagnitude": 2,
+      "duration": 5
+    }
+  ],
+  "rollHistory": {
+    "rolls": []
+  }
+}

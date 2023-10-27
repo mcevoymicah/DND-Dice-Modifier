@@ -185,7 +185,7 @@ public class GameCharacter {
         return json;
     }
 
-    private JSONArray abilityScoresToJson() {
+    public JSONArray abilityScoresToJson() {
         JSONArray jsonArray = new JSONArray();
         for (AbilityScore score : abilityScores) {
             jsonArray.put(score.toJson());
@@ -193,7 +193,7 @@ public class GameCharacter {
         return jsonArray;
     }
 
-    private JSONArray buffsDebuffsToJson() {
+    public JSONArray buffsDebuffsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (BuffDebuff buffDebuff : activeBuffsDebuffs) {
             jsonArray.put(buffDebuff.toJson());
@@ -201,7 +201,7 @@ public class GameCharacter {
         return jsonArray;
     }
 
-    private JSONArray skillsToJson() {
+    public JSONArray skillsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Skill skill : skills) {
             jsonArray.put(skill.toJson());

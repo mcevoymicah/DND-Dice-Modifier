@@ -5,6 +5,7 @@ import model.BuffDebuff;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.json.JSONObject;
 
 
 public class BuffDebuffTest {
@@ -64,6 +65,17 @@ public class BuffDebuffTest {
     public void testGetDescription() {
         String expectedDescription = "Strength Boost (STRENGTH, 2, Duration: 5 rounds)";
         assertEquals(expectedDescription, buffDebuff.getDescription());
+    }
+
+    @Test
+    public void testToJson() {
+        JSONObject json = buffDebuff.toJson();
+
+        // Check each field in the JSON object
+        assertEquals("Strength Boost", json.getString("name"));
+        assertEquals("STRENGTH", json.getString("effectAbility")); // Assuming that AbilityType.STRENGTH.toString() returns "STRENGTH"
+        assertEquals(2, json.getInt("effectMagnitude"));
+        assertEquals(5, json.getInt("duration"));
     }
 
 }

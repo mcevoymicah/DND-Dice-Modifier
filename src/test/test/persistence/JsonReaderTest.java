@@ -1,7 +1,9 @@
-package persistence;
+package test.persistence;
 
 import model.*;
 import org.junit.jupiter.api.Test;
+import persistence.JsonReader;
+import persistence.JsonTest;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,6 +64,28 @@ class JsonReaderTest extends JsonTest {
         }
 
     }
+
+    @Test
+    void testReaderCharacterWithBuffsDebuffs() {
+        JsonReader reader = new JsonReader("./data/testReaderCharacterWithBuffsDebuffs.json");
+        try {
+            GameCharacter character = reader.read();
+            checkGameCharacter("John Buffed", character, character);
+
+            List<BuffDebuff> activeBuffsDebuffs = character.getActiveBuffsDebuffs();
+            assertEquals(1, activeBuffsDebuffs.size());
+            BuffDebuff buffDebuff = activeBuffsDebuffs.get(0);
+
+            assertEquals("Strength Buff", buffDebuff.getName());
+            assertEquals(AbilityType.STRENGTH, buffDebuff.getEffectAbility());
+            assertEquals(2, buffDebuff.getEffectMagnitude());
+            assertEquals(5, buffDebuff.getDuration());
+
+        } catch (IOException e) {
+            fail("Couldn't read from file");
+        }
+    }
+
 
 }
 

@@ -3,6 +3,7 @@ package test;
 import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.json.*;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class GameCharacterTest {
     private BuffDebuff testBuff;
     private Skill testSkill;
     private Roll testRoll;
+
 
     @BeforeEach
     public void setup() {
@@ -233,6 +235,83 @@ public class GameCharacterTest {
         character.getAbilityScores().clear();
         assertFalse(character.hasAbility(AbilityType.STRENGTH));
     }
+
+    @Test
+    public void testBuffsDebuffsToJsonNoActiveBuffsDebuffs() {
+        JSONArray jsonArray = character.buffsDebuffsToJson();
+        assertEquals(0, jsonArray.length());
+    }
+
+    @Test
+    public void testBuffsDebuffsToJsonOneActiveBuffDebuff() {
+        character.addBuffDebuff(testBuff);
+
+        JSONArray jsonArray = character.buffsDebuffsToJson();
+        assertEquals(1, jsonArray.length());
+
+        JSONObject jsonObject = jsonArray.getJSONObject(0);
+        assertEquals("Strength Boost", jsonObject.getString("name"));
+    }
+
+    @Test
+    public void testBuffsDebuffsToJsonMultipleActiveBuffsDebuffs() {
+        character.addBuffDebuff(testBuff);
+        BuffDebuff testBuff2 = new BuffDebuff("Dexterity Boost", AbilityType.DEXTERITY, 1, 4);
+        character.addBuffDebuff(testBuff2);
+
+        JSONArray jsonArray = character.buffsDebuffsToJson();
+        assertEquals(2, jsonArray.length());
+
+        JSONObject jsonObject1 = jsonArray.getJSONObject(0);
+        assertEquals("Strength Boost", jsonObject1.getString("name"));
+
+        JSONObject jsonObject2 = jsonArray.getJSONObject(1);
+        assertEquals("Dexterity Boost", jsonObject2.getString("name"));
+    }
+
+    @Test
+    public void testSkillsToJsonNoSkills() {
+        JSONArray jsonArray = character.skillsToJson();
+        assertEquals(0, jsonArray.length());
+    }
+
+    @Test
+    public void testSkillsToJsonOneSkill() {
+        character.addSkill(testSkill);
+
+        JSONArray jsonArray = character.skillsToJson();
+        assertEquals(1, jsonArray.length());
+
+        JSONObject jsonObject = jsonArray.getJSONObject(0);
+        assertEquals(SkillType.ACROBATICS.toString(), jsonObject.getString("type"));
+    }
+
+    @Test
+    public void testSkillsToJsonMultipleSkills() {
+        character.addSkill(testSkill);
+        Skill testSkill2 = new Skill(SkillType.ATHLETICS, testAbility, false);
+        character.addSkill(testSkill2);
+
+        JSONArray jsonArray = character.skillsToJson();
+        assertEquals(2, jsonArray.length());
+
+        JSONObject jsonObject1 = jsonArray.getJSONObject(0);
+        assertEquals(SkillType.ACROBATICS.toString(), jsonObject1.getString("type"));
+
+        JSONObject jsonObject2 = jsonArray.getJSONObject(1);
+        assertEquals(SkillType.ATHLETICS.toString(), jsonObject2.getString("type"));
+    }
+
+    @Test
+    public void testGetAbilityScoreByTypeWithNonExistingType() {
+        character.getAbilityScores().clear();
+        AbilityScore result = character.getAbilityScoreByType(AbilityType.STRENGTH);
+
+        assertNull(result, "Expected the returned AbilityScore to be null for a non-existent type");
+    }
+
+
+
 
 }
 

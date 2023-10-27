@@ -4,6 +4,7 @@ import model.AbilityScore;
 import model.AbilityType;
 import model.Skill;
 import model.SkillType;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -86,6 +87,19 @@ public class SkillTest {
         assertEquals(AbilityType.CHARISMA, Skill.getAssociatedAbilityBySkill(SkillType.INTIMIDATION));
         assertEquals(AbilityType.CHARISMA, Skill.getAssociatedAbilityBySkill(SkillType.PERFORMANCE));
         assertEquals(AbilityType.CHARISMA, Skill.getAssociatedAbilityBySkill(SkillType.PERSUASION));
+    }
+
+    @Test
+    public void testToJson() {
+        JSONObject json = stealthSkill.toJson();
+
+        // Check each field in the JSON object
+        assertEquals("STEALTH", json.getString("type"));
+        JSONObject abilityJson = json.getJSONObject("associatedAbility");
+        assertEquals("DEXTERITY", abilityJson.getString("type"));
+        assertEquals(14, abilityJson.getInt("score"));
+
+        assertTrue(json.getBoolean("isProficient"));
     }
 
 
