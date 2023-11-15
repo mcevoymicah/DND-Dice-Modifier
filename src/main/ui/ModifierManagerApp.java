@@ -87,7 +87,10 @@ public class ModifierManagerApp {
         System.out.println("Enter character's name:");
         String name = input.next();
 
-        character = new GameCharacter(name);
+        System.out.println("Enter character's level:");
+        int level  = input.nextInt();
+
+        character = new GameCharacter(name, level);
 
         System.out.println("Please create your character profile by setting your ability scores.");
 
@@ -245,6 +248,7 @@ public class ModifierManagerApp {
     // EFFECTS: Displays the character's basic details.
     private void viewCharacterDetails() {
         System.out.println("Character Name: " + character.getName());
+        System.out.println("Character Level: " + character.getLevel());
         displayAbilityScores();
         displayBuffsDebuffs();
         displaySkillsProficiency();
@@ -390,7 +394,8 @@ public class ModifierManagerApp {
         int abilityModifier = getModifierForAbility(associatedAbility);
 
         boolean isProficient = character.isProficientInSkill(skill);
-        int proficiencyBonus = isProficient ? 2 : 0; // Assuming proficiency bonus is 2 for simplicity
+        int bonus = 1 + (character.getLevel() + 3) / 4;
+        int proficiencyBonus = isProficient ? bonus : 0;
 
         int buffDebuffModifier = calculateBuffDebuffModifier(associatedAbility);
 

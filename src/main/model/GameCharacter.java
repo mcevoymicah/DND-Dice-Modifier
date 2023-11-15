@@ -11,14 +11,16 @@ import org.json.JSONObject;
 
 public class GameCharacter {
     private final String name;
+    private int level;
     private final List<AbilityScore> abilityScores;       // A list of the six main ability scores.
     private final List<BuffDebuff> activeBuffsDebuffs;    // A list of currently active buffs and debuffs.
     private final List<Skill> skills;                     // A list of skills the character is proficient in.
     private final RollHistory rollHistory;                // A record of all rolls made by the character.
 
     // EFFECTS: constructs a character with a name and initializes default lists for attributes.
-    public GameCharacter(String name) {
+    public GameCharacter(String name, int level) {
         this.name = name;
+        this.level = level;
         this.abilityScores = new ArrayList<>();
         this.activeBuffsDebuffs = new ArrayList<>();
         this.skills = new ArrayList<>();
@@ -34,6 +36,10 @@ public class GameCharacter {
 
     public String getName() {
         return this.name;
+    }
+
+    public int getLevel() {
+        return this.level;
     }
 
     public List<AbilityScore> getAbilityScores() {
@@ -178,6 +184,7 @@ public class GameCharacter {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", name);
+        json.put("level", level);
         json.put("abilityScores", abilityScoresToJson());
         json.put("activeBuffsDebuffs", buffsDebuffsToJson());
         json.put("skills", skillsToJson());

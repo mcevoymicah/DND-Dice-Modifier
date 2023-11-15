@@ -43,7 +43,9 @@ public class JsonReader {
     // EFFECTS: Returns a GameCharacter parsed from the provided JSON object
     private GameCharacter parseGameCharacter(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
-        GameCharacter character = new GameCharacter(name);
+        int level = jsonObject.getInt("level");
+
+        GameCharacter character = new GameCharacter(name, level);
         addAbilityScores(character, jsonObject);
         addSkills(character, jsonObject);
         addBuffsDebuffs(character, jsonObject);

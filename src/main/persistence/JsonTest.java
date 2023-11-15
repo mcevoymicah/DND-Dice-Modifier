@@ -19,8 +19,9 @@ public class JsonTest {
     }
 
     // Helper method to validate GameCharacter contents
-    protected void checkGameCharacter(String name, GameCharacter expected, GameCharacter actual) {
+    protected void checkGameCharacter(String name, int level, GameCharacter expected, GameCharacter actual) {
         assertEquals(name, actual.getName());
+        assertEquals(level, actual.getLevel());
         assertEquals(expected.getAbilityScores().size(), actual.getAbilityScores().size());
         assertEquals(expected.getSkills().size(), actual.getSkills().size());
         assertEquals(expected.getActiveBuffsDebuffs().size(), actual.getActiveBuffsDebuffs().size());
