@@ -1,8 +1,9 @@
 {
-  "abilityScores": [],
-  "activeBuffsDebuffs": [],
-  "skills": [],
   "name": "John Doe",
+  "level": 1,
+  "abilityScores": [],
+  "skills": [],
+  "activeBuffsDebuffs": [],
   "rollHistory": {
     "rolls": []
   }

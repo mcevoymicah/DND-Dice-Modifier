@@ -1,4 +1,4 @@
-package persistence;
+package test.persistence;
 
 import model.*;
 

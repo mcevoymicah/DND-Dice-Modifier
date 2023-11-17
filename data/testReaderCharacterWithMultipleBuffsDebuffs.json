@@ -1,0 +1,32 @@
+{
+  "name": "John MultiBuff",
+  "level": 4,
+  "abilityScores": [
+  ],
+  "skills": [
+  ],
+  "activeBuffsDebuffs": [
+    {
+      "name": "Strength Buff",
+      "effectAbility": "STRENGTH",
+      "effectMagnitude": 2,
+      "duration": 5
+    },
+    {
+      "name": "Dexterity Buff",
+      "effectAbility": "DEXTERITY",
+      "effectMagnitude": 1,
+      "duration": 3
+    },
+    {
+      "name": "Intelligence Boost",
+      "effectAbility": "INTELLIGENCE",
+      "effectMagnitude": 3,
+      "duration": 4
+    }
+  ],
+  "rollHistory": {
+    "rolls": [
+    ]
+  }
+}

@@ -1,4 +1,8 @@
 {
+
+  "name": "John Doe",
+  "level": 5,
+
   "abilityScores": [
     {
       "type": "STRENGTH",
@@ -26,7 +30,7 @@
       }
     }
   ],
-  "name": "John Doe",
+
   "rollHistory": {
     "rolls": [
       {

@@ -1,6 +1,7 @@
 {
     "skills": [],
     "rollHistory": {"rolls": []},
+    "level": 10,
     "name": "John Doe",
     "activeBuffsDebuffs": [],
     "abilityScores": []

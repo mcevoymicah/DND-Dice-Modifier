@@ -3,7 +3,6 @@ package test.persistence;
 import model.*;
 import org.junit.jupiter.api.Test;
 import persistence.JsonReader;
-import persistence.JsonTest;
 import persistence.JsonWriter;
 
 import java.io.IOException;

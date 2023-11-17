@@ -340,6 +340,16 @@ public class GameCharacterTest {
         assertEquals(2, character.getActiveBuffsDebuffs().get(1).getDuration());
     }
 
+    @Test
+    public void testGetAbilityScoreByTypeNonExistent() {
+        character.getAbilityScores().clear();
+
+        AbilityScore result = character.getAbilityScoreByType(AbilityType.CHARISMA);
+        assertNull(result);
+    }
+
+
+
 
 }
 

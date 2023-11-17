@@ -3,7 +3,6 @@ package test.persistence;
 import model.*;
 import org.junit.jupiter.api.Test;
 import persistence.JsonReader;
-import persistence.JsonTest;
 
 import java.io.IOException;
 import java.util.List;
@@ -71,7 +70,7 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testReaderCharacterWithBuffsDebuffs.json");
         try {
             GameCharacter character = reader.read();
-            checkGameCharacter("John Doe", character.getLevel(), character, character);
+            checkGameCharacter("John Buffed", character.getLevel(), character, character);
 
 
             List<BuffDebuff> activeBuffsDebuffs = character.getActiveBuffsDebuffs();
@@ -93,7 +92,7 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testReaderCharacterWithBuffsDebuffs.json");
         try {
             GameCharacter character = reader.read();
-            checkGameCharacter("John Doe", character.getLevel(), character, character);
+            checkGameCharacter("John Buffed", character.getLevel(), character, character);
 
 
             assertTrue(character.getRollHistory().getRollList().isEmpty());
@@ -102,6 +101,53 @@ class JsonReaderTest extends JsonTest {
             fail("Couldn't read from file");
         }
     }
+
+    @Test
+    void testReaderCharacterWithMultipleSkills() {
+        JsonReader reader = new JsonReader("./data/testReaderCharacterWithMultipleSkills.json");
+        try {
+            GameCharacter character = reader.read();
+            checkGameCharacter("John MultiSkill", character.getLevel(), character, character);
+
+            List<Skill> skills = character.getSkills();
+            assertTrue(skills.size() > 1, "Character should have more than one skill.");
+
+            for (Skill skill : skills) {
+                assertNotNull(skill, "Skill should not be null.");
+                assertNotNull(skill.getType(), "Skill type should not be null.");
+
+            }
+
+        } catch (IOException e) {
+            fail("Couldn't read from file");
+        }
+    }
+
+    @Test
+    void testReaderCharacterWithMultipleBuffsDebuffs() {
+        JsonReader reader = new JsonReader("./data/testReaderCharacterWithMultipleBuffsDebuffs.json");
+        try {
+            GameCharacter character = reader.read();
+            checkGameCharacter("John MultiBuff", character.getLevel(), character, character);
+
+            List<BuffDebuff> buffsDebuffs = character.getActiveBuffsDebuffs();
+            assertTrue(buffsDebuffs.size() > 1, "Character should have more than one buff/debuff.");
+
+            for (BuffDebuff buffDebuff : buffsDebuffs) {
+                assertNotNull(buffDebuff, "Buff/Debuff should not be null.");
+                assertNotNull(buffDebuff.getName(), "Buff/Debuff name should not be null.");
+                assertNotNull(buffDebuff.getEffectAbility(), "Buff/Debuff effect ability should not be null.");
+                assertTrue(buffDebuff.getEffectMagnitude() != 0, "Buff/Debuff effect magnitude should not be zero.");
+                assertTrue(buffDebuff.getDuration() > 0, "Buff/Debuff duration should be positive.");
+            }
+
+        } catch (IOException e) {
+            fail("Couldn't read from file");
+        }
+    }
+
+
+
 
 
 

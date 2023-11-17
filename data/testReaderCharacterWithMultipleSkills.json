@@ -1,0 +1,35 @@
+{
+  "name": "John MultiSkill",
+  "level": 3,
+  "abilityScores": [
+  ],
+  "skills": [
+    {
+      "type": "ATHLETICS",
+      "isProficient": true,
+      "associatedAbility": {
+        "type": "STRENGTH"
+      }
+    },
+    {
+      "type": "ACROBATICS",
+      "isProficient": false,
+      "associatedAbility": {
+        "type": "DEXTERITY"
+      }
+    },
+    {
+      "type": "ARCANA",
+      "isProficient": true,
+      "associatedAbility": {
+        "type": "INTELLIGENCE"
+      }
+    }
+  ],
+  "activeBuffsDebuffs": [
+  ],
+  "rollHistory": {
+    "rolls": [
+    ]
+  }
+}
