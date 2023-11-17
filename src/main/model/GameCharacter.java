@@ -109,6 +109,27 @@ public class GameCharacter {
         activeBuffsDebuffs.clear();
     }
 
+    // MODIFIES: this
+    // EFFECTS: Decreases the duration of each active buff/debuff by 1 and removes it if its duration is 0
+    public void updateBuffsDebuffsDuration() {
+        List<BuffDebuff> toRemove = new ArrayList<>();
+
+        // Decrease the duration and collect buffs/debuffs that need to be removed
+        for (BuffDebuff buffDebuff : activeBuffsDebuffs) {
+            buffDebuff.decrementDuration();
+            if (buffDebuff.getDuration() <= 0) {
+                toRemove.add(buffDebuff);
+            }
+        }
+
+        // Remove buffs/debuffs with zero or negative duration
+        for (BuffDebuff buffDebuff : toRemove) {
+            activeBuffsDebuffs.remove(buffDebuff);
+        }
+    }
+
+
+
 
     // Skills
 

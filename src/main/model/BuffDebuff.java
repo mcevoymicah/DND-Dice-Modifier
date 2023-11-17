@@ -65,15 +65,15 @@ public class BuffDebuff {
 
     // Other
 
-    // REQUIRES: rounds to be a non-negative integer
     // MODIFIES: this
-    // EFFECTS: decreases the buff/debuff duration by the specified number of rounds
-    public void decrementDuration(int rounds) {
-        this.duration -= rounds;
-        if (this.duration < 0) {
-            this.duration = 0; // Ensure it doesn't go into negative values
+    // EFFECTS: Decreases the duration of this buff/debuff by 1 and returns the new duration
+    public int decrementDuration() {
+        if (duration > 0) {
+            duration--;
         }
+        return duration;
     }
+
 
     // REQUIRES: rounds to be a non-negative integer
     // MODIFIES: this

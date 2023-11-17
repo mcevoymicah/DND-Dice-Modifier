@@ -26,7 +26,7 @@ public class GameCharacterTest {
         testRoll = new Roll("Test Roll", 20, 5);
         RollHistory testRollHistory = new RollHistory(new ArrayList<>());
 
-        character = new GameCharacter("TestChar");
+        character = new GameCharacter("TestChar", 10);
 
 
     }
@@ -256,7 +256,8 @@ public class GameCharacterTest {
     @Test
     public void testBuffsDebuffsToJsonMultipleActiveBuffsDebuffs() {
         character.addBuffDebuff(testBuff);
-        BuffDebuff testBuff2 = new BuffDebuff("Dexterity Boost", AbilityType.DEXTERITY, 1, 4);
+        BuffDebuff testBuff2 = new BuffDebuff
+                ("Dexterity Boost", AbilityType.DEXTERITY, 1, 4);
         character.addBuffDebuff(testBuff2);
 
         JSONArray jsonArray = character.buffsDebuffsToJson();
@@ -310,7 +311,34 @@ public class GameCharacterTest {
         assertNull(result, "Expected the returned AbilityScore to be null for a non-existent type");
     }
 
+    @Test
+    public void testDecrementBuffDebuffDuration() {
+        character.addBuffDebuff(testBuff);
+        character.updateBuffsDebuffsDuration();
+        BuffDebuff buffDebuff = character.getActiveBuffsDebuffs().get(0);
+        assertEquals(4, buffDebuff.getDuration());
+    }
 
+    @Test
+    public void testRemoveBuffDebuffAfterDurationExpires() {
+        character.addBuffDebuff(new BuffDebuff("Temp Buff", AbilityType.CHARISMA, 1, 1));
+        character.updateBuffsDebuffsDuration();
+        character.updateBuffsDebuffsDuration();
+        assertTrue(character.getActiveBuffsDebuffs().isEmpty());
+    }
+
+
+    @Test
+    public void testDecrementMultipleBuffDebuffDurations() {
+        character.addBuffDebuff(new BuffDebuff
+                ("Strength Buff", AbilityType.STRENGTH, 2, 5));
+        character.addBuffDebuff(new BuffDebuff
+                ("Dexterity Buff", AbilityType.DEXTERITY, 1, 3));
+        character.updateBuffsDebuffsDuration();
+
+        assertEquals(4, character.getActiveBuffsDebuffs().get(0).getDuration());
+        assertEquals(2, character.getActiveBuffsDebuffs().get(1).getDuration());
+    }
 
 
 }

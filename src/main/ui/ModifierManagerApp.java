@@ -313,6 +313,8 @@ public class ModifierManagerApp {
         } else {
             rollForAbilityCheck();
         }
+
+        character.updateBuffsDebuffsDuration();
     }
 
     // EFFECTS:  Prompts the user to select a skill from the available SkillType options.

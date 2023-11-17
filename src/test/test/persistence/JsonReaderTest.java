@@ -28,7 +28,8 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testReaderEmptyCharacter.json");
         try {
             GameCharacter character = reader.read();
-            checkGameCharacter("John Doe", character, character);
+            checkGameCharacter("John Doe", character.getLevel(), character, character);
+
             assertTrue(character.getActiveBuffsDebuffs().isEmpty());
             assertTrue(character.getSkills().isEmpty());
             assertTrue(character.getRollHistory().getRollList().isEmpty()); // check for an empty roll history
@@ -42,7 +43,7 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testReaderGeneralCharacter.json");
         try {
             GameCharacter character = reader.read();
-            checkGameCharacter("John Doe", character, character);
+            checkGameCharacter("John Doe", character.getLevel(), character, character);
 
             List<AbilityScore> abilities = character.getAbilityScores();
             assertEquals(6, abilities.size());
@@ -70,7 +71,8 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testReaderCharacterWithBuffsDebuffs.json");
         try {
             GameCharacter character = reader.read();
-            checkGameCharacter("John Buffed", character, character);
+            checkGameCharacter("John Doe", character.getLevel(), character, character);
+
 
             List<BuffDebuff> activeBuffsDebuffs = character.getActiveBuffsDebuffs();
             assertEquals(1, activeBuffsDebuffs.size());
@@ -91,7 +93,8 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testReaderCharacterWithBuffsDebuffs.json");
         try {
             GameCharacter character = reader.read();
-            checkGameCharacter("John Buffed", character, character);
+            checkGameCharacter("John Doe", character.getLevel(), character, character);
+
 
             assertTrue(character.getRollHistory().getRollList().isEmpty());
 

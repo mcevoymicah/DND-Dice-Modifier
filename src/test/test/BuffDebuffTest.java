@@ -50,14 +50,24 @@ public class BuffDebuffTest {
     }
 
     @Test
+    public void testDecrementDuration() {
+        buffDebuff.decrementDuration();
+        assertEquals(4, buffDebuff.getDuration());
+    }
+
+    @Test
     public void testDecrementDurationToZero() {
-        buffDebuff.decrementDuration(5);
+        for (int i = 0; i < 5; i++) {
+            buffDebuff.decrementDuration();
+        }
         assertEquals(0, buffDebuff.getDuration());
     }
 
     @Test
     public void testDecrementDurationBeyondZero() {
-        buffDebuff.decrementDuration(10);
+        for (int i = 0; i < 6; i++) {
+            buffDebuff.decrementDuration();
+        }
         assertEquals(0, buffDebuff.getDuration());
     }
 

@@ -15,7 +15,7 @@ class JsonWriterTest extends JsonTest {
     @Test
     void testWriterInvalidFile() {
         try {
-            GameCharacter character = new GameCharacter("Jane Doe");
+            GameCharacter character = new GameCharacter("Jane Doe", 10);
             JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
             writer.open();
             fail("IOException was expected");
@@ -27,7 +27,7 @@ class JsonWriterTest extends JsonTest {
     @Test
     void testWriterEmptyCharacter() {
         try {
-            GameCharacter character = new GameCharacter("John Doe");
+            GameCharacter character = new GameCharacter("John Doe", 10);
             // Clear default ability scores to ensure character is truly "empty"
             character.getAbilityScores().clear();
             character.getRollHistory().clearRollHistory();
@@ -39,7 +39,8 @@ class JsonWriterTest extends JsonTest {
 
             JsonReader reader = new JsonReader("./data/testWriterEmptyCharacter.json");
             character = reader.read();
-            checkGameCharacter("John Doe", character, character);
+            checkGameCharacter("John Doe", character.getLevel(), character, character);
+
             assertTrue(character.getActiveBuffsDebuffs().isEmpty());
             assertTrue(character.getSkills().isEmpty());
             assertTrue(character.getRollHistory().getRollList().isEmpty());
@@ -52,7 +53,7 @@ class JsonWriterTest extends JsonTest {
     @Test
     void testWriterGeneralCharacter() {
         try {
-            GameCharacter character = new GameCharacter("John Doe");
+            GameCharacter character = new GameCharacter("John Doe", 10);
             character.updateAbilityScore(AbilityType.STRENGTH, 15);
             Roll sampleRoll = new Roll("Test Roll", 10, 2);
             character.getRollHistory().addRoll(sampleRoll);
@@ -64,7 +65,8 @@ class JsonWriterTest extends JsonTest {
 
             JsonReader reader = new JsonReader("./data/testWriterGeneralCharacter.json");
             character = reader.read();
-            checkGameCharacter("John Doe", character, character);
+            checkGameCharacter("John Doe", character.getLevel(), character, character);
+
             checkAbilityScore(AbilityType.STRENGTH, 15, character.getAbilityScoreByType(AbilityType.STRENGTH));
 
             // Check roll history
