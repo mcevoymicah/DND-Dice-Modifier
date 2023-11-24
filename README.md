@@ -47,7 +47,7 @@ and the gaming experience more immersive.
 3. **Define Skills & Proficiencies:**
     - As a user, I want to select which skills my character is proficient in
 
-### Viewing Li sts:
+### Viewing Lists:
 4. **View Ability Scores, Modifiers & Skills:**
     - As a user, I want to see my character's ability scores, their modifiers, and the skills they're proficient in.
 
@@ -59,14 +59,38 @@ and the gaming experience more immersive.
 
 ### Specific Actions:
 7. **Roll for Checks:**
-    - As a user, when prompted for a skill or ability check, I want the system to consider my ability modifier, any proficiency bonus, and other relevant buffs/debuffs, then show the result.
+    - As a user, when prompted for a skill or ability check, I want the system to consider my ability modifier, 
+   any proficiency bonus, and other relevant buffs/debuffs, then show the result.
 
 8. **Input Custom Die Result:**
     - As a user, I want the option to input my own die result instead of relying on the system's roll.
 
 ### Data Persistence:
 9. **Save Character:**
-    - As a user, when I select the quit option from the application menu, I want to be reminded to save my character to file and have the option to do so or not.
+    - As a user, when I select the quit option from the application menu, I want to be reminded to save my 
+   character to file and have the option to do so or not.
 
 10. **Load Character:**
     - As a user, when I start the application, I want to be given the option to load my character from file.
+
+# Instructions for Grader
+
+- You can generate the first required action related to the user story "adding multiple Xs to a Y" by adding buffs 
+or debuffs to a character. This is done by selecting the "Add Buff/Debuff" option in the application menu, where you 
+can input details like the name, effect, and duration of the buff/debuff.
+
+
+- You can generate the second required action related to the user story "adding multiple Xs to a Y" by 
+selecting skills in which the character is proficient. This is achieved through the "Define Skills 
+& Proficiencies" feature, where you can check or uncheck skills to indicate
+
+
+- You can locate my visual component by 
+
+
+- You can save the state of my application by selecting the quit option from the application menu, where you are then
+  given the option to save your character to file or not.
+
+
+- You can reload the state of my application by starting the application where you are then given the option to load 
+the previous character 
