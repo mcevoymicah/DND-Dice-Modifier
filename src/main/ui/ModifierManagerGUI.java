@@ -9,6 +9,17 @@ import model.*;
 
 import java.util.*;
 
+// This class represents the main GUI for managing character modifiers in a Dungeons & Dragons 5th Edition game.
+
+// The application allows users to:
+//         Initialize a new game character with ability scores
+//         Add buffs and debuffs to the character
+//         Define character's skills and proficiencies
+//         View the character's details including ability scores, active buffs/debuffs, skills, and recent roll history
+//         Make skill and ability checks, simulating dice rolls with the option of manual input or automatic dice roll
+//         Save a character and load a previous character
+
+
 
 public class ModifierManagerGUI extends JFrame {
     private final ModifierManagerApp managerApp;
@@ -51,7 +62,7 @@ public class ModifierManagerGUI extends JFrame {
 
     // Initial Panel
 
-    // REQUIRES: This method does not have specific requirements.
+
     // MODIFIES: this
     // EFFECTS: Initializes and configures the initialPanel with a BoxLayout,
     //           background color, border, title label, and buttons.
@@ -119,32 +130,46 @@ public class ModifierManagerGUI extends JFrame {
         characterCreationPanel.setVisible(false);
     }
 
+    // MODIFIES: this, nameField, levelField
+    // EFFECTS: Creates and returns a JPanel (leftPanel) with a vertical BoxLayout.
+    //          This panel contains two labeled text fields: one for the character's name and one for their level.
     private JPanel setupLeftPanel() {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBackground(backgroundColor);
         leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding
 
-        Dimension textFieldSize = new Dimension(500, 80); // Preferred size for text fields
-        nameField.setMaximumSize(textFieldSize);
+
+        nameField.setMaximumSize(new Dimension(500, 80));
         nameField.setBackground(backgroundColor);
         nameField.setForeground(textColor);
 
-        levelField.setMaximumSize(textFieldSize);
+        levelField.setMaximumSize(new Dimension(500, 80));
         levelField.setBackground(backgroundColor);
         levelField.setForeground(textColor);
 
-        leftPanel.add(Box.createVerticalGlue()); // Pushes components to the center
+        ImageIcon imageIcon = new ImageIcon("images/pixilart-drawing.png"); // Replace with your image path
+
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // This line will center the image in the panel
+
+        leftPanel.add(Box.createVerticalGlue());
         leftPanel.add(createLabel("Name:"));
         leftPanel.add(nameField);
-        leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer between Name and Level
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         leftPanel.add(createLabel("Level:"));
         leftPanel.add(levelField);
-        leftPanel.add(Box.createVerticalGlue()); // Pushes components to the center
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        leftPanel.add(imageLabel); // Add the image label here
+        leftPanel.add(Box.createVerticalGlue());
 
         return leftPanel;
     }
 
+
+    // MODIFIES: this, abilityFields
+    // EFFECTS: Creates and returns a JPanel (abilityPanel) with a GridBagLayout.
+    //          The panel contains a set of labeled text fields, one for each AbilityType.
     private JPanel setupAbilityPanel() {
         JPanel abilityPanel = new JPanel();
         abilityPanel.setLayout(new GridBagLayout()); // For better control over component layout
@@ -182,7 +207,6 @@ public class ModifierManagerGUI extends JFrame {
 
     // EFFECTS: Handles the action of the submit button, which involves validating input,
     //          creating a character, and switching panels.
-
     private void handleSubmitButtonAction() {
         try {
 
@@ -208,14 +232,11 @@ public class ModifierManagerGUI extends JFrame {
         }
     }
 
-
-
     // Action Panel
 
     // MODIFIES: this
     // EFFECTS: Initializes and configures the actionsPanel with buttons for different actions (adding buffs/debuffs,
     //         defining skills, etc.) and sets up their action listeners.
-
     private void setupActionsPanel() {
 
         initializeActionPanel();
@@ -262,7 +283,8 @@ public class ModifierManagerGUI extends JFrame {
     // Load Character Panel
 
     // MODIFIES:
-    // EFFECTS: Loads a character
+    // EFFECTS: Loads a panel containing a message about whether character was loaded properly
+    //          and an option to return to the actions menu
     private void setupPostLoadPanel() {
         postLoadPanel.setLayout(new BoxLayout(postLoadPanel, BoxLayout.Y_AXIS));
         postLoadPanel.setBackground(backgroundColor);
@@ -289,6 +311,8 @@ public class ModifierManagerGUI extends JFrame {
 
     // Save Character Panel
 
+    // EFFECTS: Asks the user if they would like to save their character before quitting.
+    //          If user responds with "yes", the character is saved to file. Otherwise, does nothing.
     private void saveCharacter() {
         int response = JOptionPane.showConfirmDialog(null,
                 "Would you like to save your character before quitting?",
@@ -298,7 +322,6 @@ public class ModifierManagerGUI extends JFrame {
         }
     }
 
-    // MODIFIES: this
     // EFFECTS: Removes the current panel and adds the specified panel.
     private void switchPanel(JPanel panelToRemove, JPanel panelToAdd) {
         getContentPane().remove(panelToRemove);
@@ -312,46 +335,39 @@ public class ModifierManagerGUI extends JFrame {
 
     // Helpers
 
-    // MODIFIES: this
     // EFFECTS: Switches from the initialPanel to the characterCreationPanel
     private void switchToCharacterCreation() {
         switchPanel(initialPanel, characterCreationPanel);
     }
 
-    // MODIFIES: this
     // EFFECTS: Switches back to the actions panel from the gamePanel.
     public void switchToActionsPanel() {
         switchPanel(gamePanel, actionsPanel);
     }
 
-    // MODIFIES: this
     // EFFECTS: Switches from the postLoadPanel to the actionsPanel
     public void switchToMainMenu() {
         switchPanel(postLoadPanel, actionsPanel);
     }
 
-    // MODIFIES: this
     // EFFECTS: Sets up the gamePanel with the buff/debuff panel and switches to it.
     private void switchToBuffDebuff(JPanel panelToAdd) {
         gamePanel.addBuffDebuffsPanel();
         switchPanel(actionsPanel, panelToAdd);
     }
 
-    // MODIFIES: this
     // EFFECTS: Sets up the gamePanel with the skill panel and switches to it.
     private void switchToSkills(JPanel panelToAdd) {
         gamePanel.setupSkillsProficienciesPanel();
         switchPanel(actionsPanel, panelToAdd);
     }
 
-    // MODIFIES: this
     // EFFECTS: Sets up the gamePanel with the details panel and switches to it.
     private void switchToViewDetails(JPanel panelToAdd) {
         gamePanel.viewDetails();
         switchPanel(actionsPanel, panelToAdd);
     }
 
-    // MODIFIES: this
     // EFFECTS: Sets up the gamePanel with the roll panel and switches to it.
     private void switchToRoll(JPanel panelToAdd) {
         gamePanel.rollChecks();

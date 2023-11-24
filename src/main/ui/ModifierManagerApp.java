@@ -7,13 +7,15 @@ import persistence.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import javax.swing.*;
 
 import java.io.*;
 
-// This class represents
+// ModifierManagerApp handles the creation, management, and persistence of GameCharacter data.
+// This class initializes characters, validates input data, manages character abilities, buffs,
+// debuffs, skills, and proficiencies, supports rolling for checks and calculating modifiers
+// based on character abilities and active effects.
 
 public class ModifierManagerApp {
     private GameCharacter character;
@@ -187,38 +189,41 @@ public class ModifierManagerApp {
 
     // EFFECTS:  Rolls the dice for the chosen skill, calculates the skill modifier,
     //           and prints the original dice roll, applied modifiers, and the total result.
-
-    public void rollForSkillCheck(SkillType chosenSkill) {
-        int originalRoll = rollDice(true); // assuming true for automatic roll
+    // EFFECTS: Performs a skill check using the specified skill type and dice roll.
+    public void rollForSkillCheck(SkillType chosenSkill, int diceRoll) {
         int modifier = calculateSkillModifier(chosenSkill);
+        int totalResult = diceRoll + modifier;
 
         // Display results using GUI (e.g., JOptionPane)
-        JOptionPane.showMessageDialog(null, "Original Roll: " + originalRoll
+        JOptionPane.showMessageDialog(null, "Original Roll: " + diceRoll
                 + "\nApplied Modifiers: " + modifier
-                + "\nTotal Result: " + (originalRoll + modifier));
+                + "\nTotal Result: " + totalResult);
 
-        Roll newRoll = new Roll(chosenSkill.name() + " check", originalRoll, modifier);
+        Roll newRoll = new Roll(chosenSkill.name() + " check", diceRoll, modifier);
         character.getRollHistory().addRoll(newRoll);
 
+        // Update buffs and debuffs as needed
         character.updateBuffsDebuffsDuration();
     }
 
-    // EFFECTS: Rolls the dice for the chosen ability, calculates the ability modifier,
-    //           and prints the original dice roll, applied modifiers, and the total result.
-    public void rollForAbilityCheck(AbilityType chosenAbility) {
-        int originalRoll = rollDice(true); // assuming true for automatic roll
+
+    // EFFECTS: Performs an ability check using the specified ability type and dice roll.
+    public void rollForAbilityCheck(AbilityType chosenAbility, int diceRoll) {
         int modifier = calculateAbilityModifier(chosenAbility);
+        int totalResult = diceRoll + modifier;
 
         // Display results using GUI
-        JOptionPane.showMessageDialog(null, "Original Roll: " + originalRoll
+        JOptionPane.showMessageDialog(null, "Original Roll: " + diceRoll
                 + "\nApplied Modifiers: " + modifier
-                + "\nTotal Result: " + (originalRoll + modifier));
+                + "\nTotal Result: " + totalResult);
 
-        Roll newRoll = new Roll(chosenAbility.name() + " check", originalRoll, modifier);
+        Roll newRoll = new Roll(chosenAbility.name() + " check", diceRoll, modifier);
         character.getRollHistory().addRoll(newRoll);
 
+        // Update buffs and debuffs as needed
         character.updateBuffsDebuffsDuration();
     }
+
 
     // EFFECTS:  If the user chooses automatic roll, it simulates a roll of a 20-sided dice.
     //           If the user chooses manual input, it prompts the user to input their own dice roll.

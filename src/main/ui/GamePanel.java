@@ -8,6 +8,11 @@ import java.awt.event.ActionListener;
 
 import model.*;
 
+// GamePanel extends JPanel and serves as the main content area in the ModifierManagerGUI,
+// It provides interactive panels for tasks like adding buffs/debuffs, managing skills, viewing character
+// details, and performing dice rolls. The class coordinates with ModifierManagerApp for
+// character data operations and manages UI components and user interactions.
+
 class GamePanel extends JPanel {
     private final ModifierManagerApp managerApp;
     private ModifierManagerGUI managerUI;
@@ -21,8 +26,6 @@ class GamePanel extends JPanel {
     public GamePanel(ModifierManagerApp app, ModifierManagerGUI gui) {
         this.managerApp = app;
         this.managerUI = gui;
-
-
     }
 
 
@@ -31,13 +34,18 @@ class GamePanel extends JPanel {
     public void addBuffDebuffsPanel() {
         initializePanel(); // Set up the panel layout and background
 
+        this.add(Box.createVerticalGlue());
+
         JTextField nameField = addNameField(); // Add name input
         JComboBox<AbilityType> abilityComboBox = addAbilityComboBox(); // Add ability selection
         JSpinner magnitudeSpinner = addMagnitudeSpinner(); // Add magnitude input
         JSpinner durationSpinner = addDurationSpinner(); // Add duration input
 
+
         addButtons(nameField, abilityComboBox, magnitudeSpinner, durationSpinner);
         // Add the Add and Return buttons
+
+        this.add(Box.createVerticalGlue());
 
         this.revalidate();
         this.repaint();
@@ -49,6 +57,7 @@ class GamePanel extends JPanel {
         JTextField nameField = new JTextField(20);
 
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
+        nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setBackground(buttonColor);
         nameField.setForeground(textColor);
 
@@ -67,7 +76,7 @@ class GamePanel extends JPanel {
         abilityComboBox.setBackground(buttonColor);
         abilityComboBox.setForeground(textColor);
 
-        this.add(new JLabel("Ability:"));
+        this.add(new JLabel("Ability:", SwingConstants.CENTER));
         this.add(abilityComboBox);
         this.add(Box.createVerticalStrut(10)); // Add space after the component
         return abilityComboBox; // Return the created JComboBox
@@ -82,7 +91,7 @@ class GamePanel extends JPanel {
         magnitudeSpinner.setBackground(buttonColor);
         magnitudeSpinner.setForeground(textColor);
 
-        this.add(new JLabel("Magnitude:"));
+        this.add(new JLabel("Magnitude:", SwingConstants.CENTER));
         this.add(magnitudeSpinner);
         this.add(Box.createVerticalStrut(10));
 
@@ -98,7 +107,7 @@ class GamePanel extends JPanel {
         durationSpinner.setBackground(buttonColor);
         durationSpinner.setForeground(textColor);
 
-        this.add(new JLabel("Duration:"));
+        this.add(new JLabel("Duration:", SwingConstants.CENTER));
         this.add(durationSpinner);
         this.add(Box.createVerticalStrut(10));
 
@@ -166,10 +175,10 @@ class GamePanel extends JPanel {
 
         // Add components to the panel
         this.add(Box.createVerticalGlue());
-        this.add(new JLabel("Select Skill:"));
+        this.add(new JLabel("Select Skill:", SwingConstants.CENTER));
         this.add(skillTypeComboBox);
         this.add(Box.createVerticalStrut(10));
-        this.add(new JLabel("Proficiency:"));
+        this.add(new JLabel("Proficiency:", SwingConstants.CENTER));
         this.add(proficiencyCheckBox);
         this.add(Box.createVerticalStrut(10));
         this.add(addSkillButton);
@@ -198,6 +207,8 @@ class GamePanel extends JPanel {
 
     // View Details
 
+    // MODIFIES: this
+    // EFFECTS: Displays the character's basic details.
     public void viewDetails() {
         initializePanel();
 
@@ -213,6 +224,10 @@ class GamePanel extends JPanel {
 
     // Dice Rolls
 
+    // MODIFIES: this
+    // EFFECTS: Sets up a panel with buttons to initiate skill checks and ability checks.
+    //           Clicking these buttons will prompt the user to select a skill or ability
+    //           and perform the corresponding check.
     public void rollChecks() {
         initializePanel();
 
@@ -234,16 +249,36 @@ class GamePanel extends JPanel {
         this.add(Box.createVerticalGlue());
     }
 
+    // MODIFIES: this
+    // EFFECTS: Opens a dialog for the user to select a skill.
+    //           Once a skill is selected, performs a skill check using managerApp.
     private void performSkillCheck() {
         SkillType chosenSkill = getUserSelectedSkill();
-        managerApp.rollForSkillCheck(chosenSkill);
+        boolean isAutomaticRoll = getUserRollChoice();
+        int rollResult = managerApp.rollDice(isAutomaticRoll);
+        managerApp.rollForSkillCheck(chosenSkill, rollResult);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Opens a dialog for the user to select an ability.
+    //           Once an ability is selected, performs an ability check using managerApp.
     private void performAbilityCheck() {
         AbilityType chosenAbility = getUserSelectedAbility();
-        managerApp.rollForAbilityCheck(chosenAbility);
+        boolean isAutomaticRoll = getUserRollChoice();
+        int rollResult = managerApp.rollDice(isAutomaticRoll);
+        managerApp.rollForAbilityCheck(chosenAbility, rollResult);
     }
 
+    private boolean getUserRollChoice() {
+        int response = JOptionPane.showConfirmDialog(null,
+                "Do you want the system to roll for you?",
+                "Roll Dice", JOptionPane.YES_NO_OPTION);
+        return response == JOptionPane.YES_OPTION;
+    }
+
+
+    // EFFECTS: Opens a dialog for the user to select a skill from the SkillType enum.
+    //          Returns the selected SkillType or null if the selection is canceled.
     private SkillType getUserSelectedSkill() {
         JComboBox<SkillType> skillComboBox = new JComboBox<>(SkillType.values());
         int result = JOptionPane.showConfirmDialog(null, skillComboBox,
@@ -256,6 +291,8 @@ class GamePanel extends JPanel {
         }
     }
 
+    // EFFECTS: Opens a dialog for the user to select an ability from the AbilityType enum.
+    //          Returns the selected AbilityType or null if the selection is canceled.
     private AbilityType getUserSelectedAbility() {
         JComboBox<AbilityType> abilityComboBox = new JComboBox<>(AbilityType.values());
         int result = JOptionPane.showConfirmDialog(null, abilityComboBox,
