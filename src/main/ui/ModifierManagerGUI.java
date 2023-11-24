@@ -12,15 +12,15 @@ import java.util.*;
 
 public class ModifierManagerGUI extends JFrame {
     private final ModifierManagerApp managerApp;
-    private GamePanel gamePanel;
+    private final GamePanel gamePanel;
     private JPanel initialPanel;
     private JPanel actionsPanel;
     private JPanel characterCreationPanel;
-    private JPanel loadCharacterPanel;
+    private JPanel postLoadPanel;
 
-    private JTextField nameField;
-    private JTextField levelField;
-    private Map<AbilityType, JTextField> abilityFields;
+    private final JTextField nameField;
+    private final JTextField levelField;
+    private final Map<AbilityType, JTextField> abilityFields;
 
 
     private final Color backgroundColor = new Color(198, 172, 143);
@@ -30,6 +30,7 @@ public class ModifierManagerGUI extends JFrame {
     public ModifierManagerGUI(ModifierManagerApp app) {
         super("D&D 5E Modifier Manager");
         this.managerApp = app;
+        this.gamePanel = new GamePanel(managerApp, this);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(400, 400);
@@ -37,11 +38,12 @@ public class ModifierManagerGUI extends JFrame {
         nameField = new JTextField();
         levelField = new JTextField();
         abilityFields = new HashMap<>();
+        postLoadPanel = new JPanel();
 
         setupInitialPanel();
         setupActionsPanel();
         setupCharacterCreationPanel();
-        setuploadCharacterPanel();
+        setupPostLoadPanel();
 
         getContentPane().add(initialPanel, BorderLayout.CENTER); // Start with the initial panel
         setVisible(true);
@@ -51,25 +53,37 @@ public class ModifierManagerGUI extends JFrame {
 
     // REQUIRES: This method does not have specific requirements.
     // MODIFIES: this
-    // EFFECTS: Initializes and configures the initialPanel with a BoxLayout, background color, and border.
-    //           Creates, adds, and sets up the "New Character" button, and "Load Character"
-    //           button to the initialPanel.
+    // EFFECTS: Initializes and configures the initialPanel with a BoxLayout,
+    //           background color, border, title label, and buttons.
     private void setupInitialPanel() {
         initialPanel = new JPanel();
         initialPanel.setLayout(new BoxLayout(initialPanel, BoxLayout.Y_AXIS));
         initialPanel.setBackground(backgroundColor);
         initialPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        addTitleAndButtonsToInitialPanel();
+    }
+
+    // EFFECTS: Adds title label and buttons to the initialPanel.
+    private void addTitleAndButtonsToInitialPanel() {
         JLabel titleLabel = new JLabel("D&D 5E Modifier Manager", SwingConstants.CENTER);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setBackground(backgroundColor);
         titleLabel.setForeground(textColor);
 
-
         JButton newCharacterButton = createButton("New Character");
-        JButton loadCharacterButton = createButton("Load Character");
+        newCharacterButton.addActionListener(e -> switchToCharacterCreation());
 
+        JButton loadCharacterButton = createButton("Load Character");
+        loadCharacterButton.addActionListener(e -> {
+            boolean loadSuccess = managerApp.loadCharacter();
+            if (loadSuccess) {
+                switchPanel(initialPanel, postLoadPanel);
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to load character.");
+            }
+        });
 
         initialPanel.add(Box.createVerticalGlue());
         initialPanel.add(titleLabel);
@@ -78,31 +92,7 @@ public class ModifierManagerGUI extends JFrame {
         initialPanel.add(Box.createVerticalStrut(10));
         initialPanel.add(loadCharacterButton);
         initialPanel.add(Box.createVerticalGlue());
-
-        newCharacterButton.addActionListener(e -> switchToCharacterCreation());
-        loadCharacterButton.addActionListener(e -> switchToLoadCharacter());
     }
-
-    // MODIFIES: this
-    // EFFECTS: Switches from the initialPanel to the characterCreationPanel
-    private void switchToCharacterCreation() {
-        getContentPane().remove(initialPanel);
-        getContentPane().add(characterCreationPanel, BorderLayout.CENTER);
-        characterCreationPanel.setVisible(true);
-        revalidate();
-        repaint();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: Switches from the initialPanel to the loadCharacterPanel
-    private void switchToLoadCharacter() {
-        getContentPane().remove(initialPanel);
-        getContentPane().add(loadCharacterPanel, BorderLayout.CENTER);
-        loadCharacterPanel.setVisible(true);
-        revalidate();
-        repaint();
-    }
-
 
     // Character Creation Panel
 
@@ -180,78 +170,45 @@ public class ModifierManagerGUI extends JFrame {
         return abilityPanel;
     }
 
+    // EFFECTS: Sets up the panel containing the submit button for character creation.
     private JPanel setupButtonPanel() {
         JButton submitButton = createButton("Create Character");
-
-        submitButton.addActionListener(e -> {
-            try {
-                String name = nameField.getText();
-                if (name.isEmpty()) {
-                    throw new IllegalArgumentException("Name field cannot be empty.");
-                }
-
-                int level;
-                if (levelField.getText().isEmpty() || !levelField.getText().matches("\\d+")) {
-                    throw new IllegalArgumentException("Level must be a numeric value.");
-                } else {
-                    level = Integer.parseInt(levelField.getText());
-                }
-
-                Map<AbilityType, Integer> abilities = new HashMap<>();
-                for (AbilityType ability : AbilityType.values()) {
-                    JTextField abilityField = abilityFields.get(ability);
-                    if (abilityField.getText().isEmpty() || !abilityField.getText().matches("\\d+")) {
-                        throw new IllegalArgumentException(ability.toString() + " must be a numeric value.");
-                    } else {
-                        int score = Integer.parseInt(abilityField.getText());
-                        abilities.put(ability, score);
-                    }
-                }
-
-                managerApp.initCharacter(name, level, abilities);
-                switchToActionsPanelFromCreation();
-            } catch (IllegalArgumentException ex) {
-                // Show an error dialog or update an error message label
-                JOptionPane.showMessageDialog(characterCreationPanel, ex.getMessage(), "Input Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        submitButton.addActionListener(e -> handleSubmitButtonAction());
 
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.add(submitButton, BorderLayout.PAGE_END);
         return buttonPanel;
     }
 
+    // EFFECTS: Handles the action of the submit button, which involves validating input,
+    //          creating a character, and switching panels.
 
-    // MODIFIES: this
-    // EFFECTS: Removes the characterPanel and adds the actionsPanel
-    private void switchToActionsPanelFromCreation() {
-        getContentPane().remove(characterCreationPanel);
-        getContentPane().add(actionsPanel, BorderLayout.CENTER);
-        actionsPanel.setVisible(true);
-        revalidate();
-        repaint();
+    private void handleSubmitButtonAction() {
+        try {
+
+            String name = managerApp.validateName(nameField.getText());
+            int level = managerApp.validateLevel(levelField.getText());
+
+
+            Map<AbilityType, String> abilityScoresStr = new HashMap<>();
+            for (AbilityType abilityType : AbilityType.values()) {
+                abilityScoresStr.put(abilityType, abilityFields.get(abilityType).getText());
+            }
+            Map<AbilityType, Integer> abilities = managerApp.validateAbilities(abilityScoresStr);
+
+
+            managerApp.initCharacter(name, level, abilities);
+
+
+            switchPanel(characterCreationPanel, actionsPanel);
+
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(characterCreationPanel, ex.getMessage(),
+                    "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
-    // Load Character Panel
 
-    // MODIFIES:
-    // EFFECTS: Loads a character
-    private void setuploadCharacterPanel() {
-        loadCharacterPanel = new JPanel();
-        loadCharacterPanel.setLayout(new BoxLayout(initialPanel, BoxLayout.Y_AXIS));
-        loadCharacterPanel.setBackground(backgroundColor);
-        loadCharacterPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    }
-
-    // MODIFIES: this
-    // EFFECTS: Removes the characterPanel and adds the actionsPanel
-    private void switchToActionsPanelFromLoad() {
-        getContentPane().remove(loadCharacterPanel);
-        getContentPane().add(actionsPanel, BorderLayout.CENTER);
-        actionsPanel.setVisible(true);
-        revalidate();
-        repaint();
-    }
 
     // Action Panel
 
@@ -260,10 +217,8 @@ public class ModifierManagerGUI extends JFrame {
     //         defining skills, etc.) and sets up their action listeners.
 
     private void setupActionsPanel() {
-        actionsPanel = new JPanel();
-        actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.Y_AXIS));
-        actionsPanel.setBackground(backgroundColor);
-        actionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        initializeActionPanel();
 
         JButton addBuffsButton = createButton("Add Buffs/Debuffs");
         JButton defineSkillsButton = createButton("Define Skills & Proficiencies");
@@ -282,34 +237,127 @@ public class ModifierManagerGUI extends JFrame {
         actionsPanel.add(rollChecksButton);
         actionsPanel.add(Box.createVerticalStrut(10));
         actionsPanel.add(quitButton);
-        actionsPanel.add(Box.createVerticalStrut(10));
 
         actionsPanel.add(Box.createVerticalGlue());
 
-        addBuffsButton.addActionListener(e -> gamePanel.addBuffDebuffsPanel());
-        addBuffsButton.addActionListener(e -> gamePanel.defineSkills());
-        addBuffsButton.addActionListener(e -> gamePanel.viewDetails());
-        addBuffsButton.addActionListener(e -> gamePanel.rollChecks());
-        addBuffsButton.addActionListener(e -> quitApp());
+        addBuffsButton.addActionListener(e -> switchToBuffDebuff(gamePanel));
+        defineSkillsButton.addActionListener(e -> switchToSkills(gamePanel));
+        viewDetailsButton.addActionListener(e -> switchToViewDetails(gamePanel));
+        rollChecksButton.addActionListener(e -> switchToRoll(gamePanel));
+        quitButton.addActionListener(e -> saveCharacter());
 
 
         actionsPanel.setVisible(false);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Clears the current GamePanel and initializes the layout and style.
+    public void initializeActionPanel() {
+        actionsPanel = new JPanel();
+        actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.Y_AXIS));
+        actionsPanel.setBackground(backgroundColor);
+        actionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    }
+
+    // Load Character Panel
+
+    // MODIFIES:
+    // EFFECTS: Loads a character
+    private void setupPostLoadPanel() {
+        postLoadPanel.setLayout(new BoxLayout(postLoadPanel, BoxLayout.Y_AXIS));
+        postLoadPanel.setBackground(backgroundColor);
+        postLoadPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel loadMessageLabel = new JLabel("Character loaded from JSON", SwingConstants.CENTER);
+        loadMessageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loadMessageLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        loadMessageLabel.setBackground(backgroundColor);
+        loadMessageLabel.setForeground(textColor);
+        loadMessageLabel.setName("loadMessageLabel"); // Set a name for the label to find it later
+
+        JButton mainMenuButton = createButton("Main Menu");
+        mainMenuButton.addActionListener(e -> switchToMainMenu());
+
+        postLoadPanel.add(Box.createVerticalGlue());
+        postLoadPanel.add(loadMessageLabel);
+        postLoadPanel.add(Box.createVerticalStrut(20));
+        postLoadPanel.add(mainMenuButton);
+        postLoadPanel.add(Box.createVerticalGlue());
+
+        postLoadPanel.setVisible(false);
+    }
+
     // Save Character Panel
 
     private void saveCharacter() {
-        // Implementation to save the current character
+        int response = JOptionPane.showConfirmDialog(null,
+                "Would you like to save your character before quitting?",
+                "Save Character", JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.YES_OPTION) {
+            managerApp.saveCharacter();
+        }
     }
 
-    // Quit Panel
+    // MODIFIES: this
+    // EFFECTS: Removes the current panel and adds the specified panel.
+    private void switchPanel(JPanel panelToRemove, JPanel panelToAdd) {
+        getContentPane().remove(panelToRemove);
+        getContentPane().add(panelToAdd, BorderLayout.CENTER);
+        panelToAdd.setVisible(true);
 
-    private void quitApp() {
-
+        revalidate();
+        repaint();
     }
 
 
-    // Constants
+    // Helpers
+
+    // MODIFIES: this
+    // EFFECTS: Switches from the initialPanel to the characterCreationPanel
+    private void switchToCharacterCreation() {
+        switchPanel(initialPanel, characterCreationPanel);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Switches back to the actions panel from the gamePanel.
+    public void switchToActionsPanel() {
+        switchPanel(gamePanel, actionsPanel);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Switches from the postLoadPanel to the actionsPanel
+    public void switchToMainMenu() {
+        switchPanel(postLoadPanel, actionsPanel);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Sets up the gamePanel with the buff/debuff panel and switches to it.
+    private void switchToBuffDebuff(JPanel panelToAdd) {
+        gamePanel.addBuffDebuffsPanel();
+        switchPanel(actionsPanel, panelToAdd);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Sets up the gamePanel with the skill panel and switches to it.
+    private void switchToSkills(JPanel panelToAdd) {
+        gamePanel.setupSkillsProficienciesPanel();
+        switchPanel(actionsPanel, panelToAdd);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Sets up the gamePanel with the details panel and switches to it.
+    private void switchToViewDetails(JPanel panelToAdd) {
+        gamePanel.viewDetails();
+        switchPanel(actionsPanel, panelToAdd);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Sets up the gamePanel with the roll panel and switches to it.
+    private void switchToRoll(JPanel panelToAdd) {
+        gamePanel.rollChecks();
+        switchPanel(actionsPanel, panelToAdd);
+    }
+
 
     // EFFECTS: Creates and returns a new JButton with the specified text, styled
     //          with center alignment, maximum size, background color, text color, border,
@@ -337,5 +385,6 @@ public class ModifierManagerGUI extends JFrame {
 
         return label;
     }
+
 
 }
