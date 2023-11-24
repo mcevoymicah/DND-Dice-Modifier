@@ -20,12 +20,13 @@ class GamePanel extends JPanel {
     private final Color buttonColor = new Color(129,195,215);
     private final Color textColor = new Color(22,66,91);
 
+    // EFFECTS: constructs a GamePanel with ModifierManagerApp and ModifierManagerGUI
 
     public GamePanel(ModifierManagerApp app, ModifierManagerGUI gui) {
         this.managerApp = app;
         this.managerUI = gui;
     }
-    
+
     // MODIFIES: this, managerApp
     // EFFECTS: Sets up panel and adds all components necessary for buff/debuff input.
     public void addBuffDebuffsPanel() {
@@ -280,6 +281,7 @@ class GamePanel extends JPanel {
         managerApp.rollForAbilityCheck(chosenAbility, rollResult);
     }
 
+    // EFFECTS: Prompts user if they want the system to roll for them
     private boolean getUserRollChoice() {
         int response = JOptionPane.showConfirmDialog(null,
                 "Do you want the system to roll for you?",
@@ -329,8 +331,8 @@ class GamePanel extends JPanel {
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
 
-    // MODIFIES: this
-    // EFFECTS:
+
+    // EFFECTS: Creates a text area for section
     private JTextArea createTextAreaForSection(String sectionText) {
         JTextArea textArea = new JTextArea(sectionText);
         textArea.setEditable(false);

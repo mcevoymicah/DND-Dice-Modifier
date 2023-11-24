@@ -38,6 +38,7 @@ public class ModifierManagerGUI extends JFrame {
     private final Color buttonColor = new Color(129,195,215);
     private final Color textColor = new Color(22,66,91);
 
+    // EFFECTS: runs the D&D Modifier Manager GUI
     public ModifierManagerGUI(ModifierManagerApp app) {
         super("D&D 5E Modifier Manager");
         this.managerApp = app;

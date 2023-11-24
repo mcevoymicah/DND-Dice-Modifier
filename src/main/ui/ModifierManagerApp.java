@@ -24,7 +24,7 @@ public class ModifierManagerApp {
     private JsonReader jsonReader;
 
 
-    // EFFECTS: runs the D&D Modifier Manager application
+    // EFFECTS: constructs a ModifierManagerApp that deals with data persistence
     public ModifierManagerApp() {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
