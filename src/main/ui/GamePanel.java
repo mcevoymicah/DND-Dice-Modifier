@@ -78,8 +78,8 @@ class GamePanel extends JPanel {
 
         this.add(new JLabel("Ability:", SwingConstants.CENTER));
         this.add(abilityComboBox);
-        this.add(Box.createVerticalStrut(10)); // Add space after the component
-        return abilityComboBox; // Return the created JComboBox
+        this.add(Box.createVerticalStrut(10));
+        return abilityComboBox;
     }
 
     // MODIFIES: this
@@ -158,7 +158,7 @@ class GamePanel extends JPanel {
     // MODIFIES: this
     // EFFECTS: Initializes components for the skills and proficiencies panel.
     private void initializeSkillsProficienciesComponents() {
-        initializePanel(); // Set up the panel layout and background
+        initializePanel();
 
         JComboBox<SkillType> skillTypeComboBox = new JComboBox<>(SkillType.values());
         skillTypeComboBox.setMaximumSize(new Dimension(

@@ -80,9 +80,6 @@ public class ModifierManagerApp {
         return validatedAbilities;
     }
 
-
-
-
     // Buffs/Debuffs
 
     // MODIFIES: this, character
@@ -194,7 +191,6 @@ public class ModifierManagerApp {
         int modifier = calculateSkillModifier(chosenSkill);
         int totalResult = diceRoll + modifier;
 
-        // Display results using GUI (e.g., JOptionPane)
         JOptionPane.showMessageDialog(null, "Original Roll: " + diceRoll
                 + "\nApplied Modifiers: " + modifier
                 + "\nTotal Result: " + totalResult);
@@ -202,7 +198,6 @@ public class ModifierManagerApp {
         Roll newRoll = new Roll(chosenSkill.name() + " check", diceRoll, modifier);
         character.getRollHistory().addRoll(newRoll);
 
-        // Update buffs and debuffs as needed
         character.updateBuffsDebuffsDuration();
     }
 
@@ -212,7 +207,6 @@ public class ModifierManagerApp {
         int modifier = calculateAbilityModifier(chosenAbility);
         int totalResult = diceRoll + modifier;
 
-        // Display results using GUI
         JOptionPane.showMessageDialog(null, "Original Roll: " + diceRoll
                 + "\nApplied Modifiers: " + modifier
                 + "\nTotal Result: " + totalResult);
@@ -220,7 +214,6 @@ public class ModifierManagerApp {
         Roll newRoll = new Roll(chosenAbility.name() + " check", diceRoll, modifier);
         character.getRollHistory().addRoll(newRoll);
 
-        // Update buffs and debuffs as needed
         character.updateBuffsDebuffsDuration();
     }
 
@@ -232,7 +225,6 @@ public class ModifierManagerApp {
         if (isAutomatic) {
             return (int) (Math.random() * 20) + 1; // 20 sided dice roll
         } else {
-            // Prompt user for manual roll using GUI
             String rollInput = JOptionPane.showInputDialog("Input your roll:");
             return Integer.parseInt(rollInput);
         }
@@ -314,6 +306,5 @@ public class ModifierManagerApp {
             return false;
         }
     }
-
 
 }

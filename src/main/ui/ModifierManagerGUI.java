@@ -208,7 +208,6 @@ public class ModifierManagerGUI extends JFrame {
     //          creating a character, and switching panels.
     private void handleSubmitButtonAction() {
         try {
-
             String name = managerApp.validateName(nameField.getText());
             int level = managerApp.validateLevel(levelField.getText());
 
@@ -372,6 +371,5 @@ public class ModifierManagerGUI extends JFrame {
 
         return label;
     }
-
 
 }
