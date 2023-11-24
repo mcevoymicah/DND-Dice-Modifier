@@ -85,7 +85,7 @@ selecting skills in which the character is proficient. This is achieved through 
 & Proficiencies" feature, where you can check or uncheck skills to indicate
 
 
-- You can locate my visual component by selecting create character after my starting my application where there will be
+- You can locate my visual component by selecting create character after starting the application, where there will be
 red pixel dragon. 
 
 
