@@ -44,7 +44,7 @@ public class ModifierManagerGUI extends JFrame {
         this.gamePanel = new GamePanel(managerApp, this);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(400, 400);
+        setSize(400, 600);
 
         nameField = new JTextField();
         levelField = new JTextField();

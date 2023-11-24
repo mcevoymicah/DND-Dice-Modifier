@@ -3,8 +3,6 @@ package ui;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import model.*;
 
@@ -27,8 +25,7 @@ class GamePanel extends JPanel {
         this.managerApp = app;
         this.managerUI = gui;
     }
-
-
+    
     // MODIFIES: this, managerApp
     // EFFECTS: Sets up panel and adds all components necessary for buff/debuff input.
     public void addBuffDebuffsPanel() {
@@ -203,8 +200,6 @@ class GamePanel extends JPanel {
         });
     }
 
-
-
     // View Details
 
     // MODIFIES: this
@@ -212,13 +207,29 @@ class GamePanel extends JPanel {
     public void viewDetails() {
         initializePanel();
 
-        this.add(new JLabel("Character Name: " + managerApp.getCharacterName()));
-        this.add(new JLabel("Character Level: " + managerApp.getCharacterLevel()));
+        JLabel name = new JLabel("Character Name: " + managerApp.getCharacterName());
+        name.setHorizontalAlignment(JLabel.CENTER);
+
+        JLabel level = new JLabel("Character Level: " + managerApp.getCharacterLevel());
+        level.setHorizontalAlignment(JLabel.CENTER);
+
+        this.add(Box.createVerticalGlue());
+
+        this.add(name);
+        this.add(level);
+
+        this.add(Box.createVerticalStrut(10));
+
         this.add(returnButton());
+
+        this.add(Box.createVerticalStrut(10));
+
         this.add(createTextAreaForSection(managerApp.getAbilityScoresText()));
         this.add(createTextAreaForSection(managerApp.getBuffsDebuffsText()));
         this.add(createTextAreaForSection(managerApp.getSkillsProficiencyText()));
         this.add(createTextAreaForSection(managerApp.getRecentRollsText()));
+
+        this.add(Box.createVerticalGlue());
 
     }
 
@@ -350,6 +361,8 @@ class GamePanel extends JPanel {
 
         JButton returnButton = createButton("Return");
         returnButton.addActionListener(e -> managerUI.switchToActionsPanel());
+
+        returnButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         return returnButton;
     }
