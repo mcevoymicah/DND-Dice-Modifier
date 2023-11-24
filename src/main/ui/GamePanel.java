@@ -55,8 +55,6 @@ class GamePanel extends JPanel {
         JTextField nameField = new JTextField(20);
 
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
-        nameField.setHorizontalAlignment(JTextField.CENTER);
-        nameField.setBackground(buttonColor);
         nameField.setForeground(textColor);
 
         this.add(new JLabel("Name:"));
@@ -71,8 +69,6 @@ class GamePanel extends JPanel {
         JComboBox<AbilityType> abilityComboBox = new JComboBox<>(AbilityType.values());
 
         abilityComboBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, abilityComboBox.getPreferredSize().height));
-        abilityComboBox.setBackground(buttonColor);
-        abilityComboBox.setForeground(textColor);
 
         this.add(new JLabel("Ability:", SwingConstants.CENTER));
         this.add(abilityComboBox);
@@ -86,8 +82,6 @@ class GamePanel extends JPanel {
         JSpinner magnitudeSpinner = new JSpinner(new SpinnerNumberModel(
                 0, -10, 10, 1));
         magnitudeSpinner.setMaximumSize(new Dimension(Integer.MAX_VALUE, magnitudeSpinner.getPreferredSize().height));
-        magnitudeSpinner.setBackground(buttonColor);
-        magnitudeSpinner.setForeground(textColor);
 
         this.add(new JLabel("Magnitude:", SwingConstants.CENTER));
         this.add(magnitudeSpinner);
@@ -102,8 +96,6 @@ class GamePanel extends JPanel {
         JSpinner durationSpinner = new JSpinner(new SpinnerNumberModel(
                 1, 1, 100, 1));
         durationSpinner.setMaximumSize(new Dimension(Integer.MAX_VALUE, durationSpinner.getPreferredSize().height));
-        durationSpinner.setBackground(buttonColor);
-        durationSpinner.setForeground(textColor);
 
         this.add(new JLabel("Duration:", SwingConstants.CENTER));
         this.add(durationSpinner);
@@ -123,6 +115,7 @@ class GamePanel extends JPanel {
                 nameField, abilityComboBox, magnitudeSpinner, durationSpinner));
 
         this.add(addButton);
+        this.setForeground(textColor);
         this.add(Box.createVerticalStrut(10));
         this.add(returnButton());
     }
@@ -161,11 +154,9 @@ class GamePanel extends JPanel {
         JComboBox<SkillType> skillTypeComboBox = new JComboBox<>(SkillType.values());
         skillTypeComboBox.setMaximumSize(new Dimension(
                 Integer.MAX_VALUE, skillTypeComboBox.getPreferredSize().height));
-        skillTypeComboBox.setBackground(buttonColor);
         skillTypeComboBox.setForeground(textColor);
 
         JCheckBox proficiencyCheckBox = new JCheckBox("Proficient");
-        proficiencyCheckBox.setBackground(buttonColor);
         proficiencyCheckBox.setForeground(textColor);
 
         JButton addSkillButton = createButton("Add Skill");
@@ -210,18 +201,21 @@ class GamePanel extends JPanel {
 
         JLabel name = new JLabel("Character Name: " + managerApp.getCharacterName());
         name.setHorizontalAlignment(JLabel.CENTER);
+        name.setForeground(textColor);
 
         JLabel level = new JLabel("Character Level: " + managerApp.getCharacterLevel());
         level.setHorizontalAlignment(JLabel.CENTER);
+        level.setForeground(textColor);
+
 
         this.add(Box.createVerticalGlue());
 
-        this.add(name);
-        this.add(level);
+        this.add(returnButton());
 
         this.add(Box.createVerticalStrut(10));
 
-        this.add(returnButton());
+        this.add(name);
+        this.add(level);
 
         this.add(Box.createVerticalStrut(10));
 
@@ -335,6 +329,9 @@ class GamePanel extends JPanel {
     // EFFECTS: Creates a text area for section
     private JTextArea createTextAreaForSection(String sectionText) {
         JTextArea textArea = new JTextArea(sectionText);
+        textArea.setBackground(backgroundColor);
+        textArea.setForeground(textColor);
+        textArea.setFont(new Font("Arial", Font.BOLD,12));
         textArea.setEditable(false);
         return textArea;
     }
