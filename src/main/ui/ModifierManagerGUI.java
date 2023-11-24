@@ -11,7 +11,7 @@ import java.util.*;
 
 
 public class ModifierManagerGUI extends JFrame {
-    private ModifierManagerApp managerApp; // Reference to the application logic
+    private final ModifierManagerApp managerApp;
     private GamePanel gamePanel;
     private JPanel initialPanel;
     private JPanel actionsPanel;
@@ -34,14 +34,14 @@ public class ModifierManagerGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(400, 400);
 
+        nameField = new JTextField();
+        levelField = new JTextField();
+        abilityFields = new HashMap<>();
+
         setupInitialPanel();
         setupActionsPanel();
         setupCharacterCreationPanel();
         setuploadCharacterPanel();
-
-        nameField = new JTextField();
-        levelField = new JTextField();
-        abilityFields = new HashMap<>();
 
         getContentPane().add(initialPanel, BorderLayout.CENTER); // Start with the initial panel
         setVisible(true);
@@ -136,12 +136,10 @@ public class ModifierManagerGUI extends JFrame {
         leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding
 
         Dimension textFieldSize = new Dimension(500, 80); // Preferred size for text fields
-        JTextField nameField = new JTextField();
         nameField.setMaximumSize(textFieldSize);
         nameField.setBackground(backgroundColor);
         nameField.setForeground(textColor);
 
-        JTextField levelField = new JTextField();
         levelField.setMaximumSize(textFieldSize);
         levelField.setBackground(backgroundColor);
         levelField.setForeground(textColor);
@@ -169,7 +167,6 @@ public class ModifierManagerGUI extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
 
-        Map<AbilityType, JTextField> abilityFields = new HashMap<>();
         for (AbilityType ability : AbilityType.values()) {
             gbc.weighty = 1;
             abilityPanel.add(createLabel(ability.toString() + ":"), gbc);
@@ -184,27 +181,43 @@ public class ModifierManagerGUI extends JFrame {
     }
 
     private JPanel setupButtonPanel() {
-
         JButton submitButton = createButton("Create Character");
 
         submitButton.addActionListener(e -> {
-            String name = nameField.getText();
-            int level = Integer.parseInt(levelField.getText());
-            Map<AbilityType, Integer> abilities = new HashMap<>();
+            try {
+                String name = nameField.getText();
+                if (name.isEmpty()) {
+                    throw new IllegalArgumentException("Name field cannot be empty.");
+                }
 
-            for (AbilityType ability : AbilityType.values()) {
-                int score = Integer.parseInt(abilityFields.get(ability).getText());
-                abilities.put(ability, score);
+                int level;
+                if (levelField.getText().isEmpty() || !levelField.getText().matches("\\d+")) {
+                    throw new IllegalArgumentException("Level must be a numeric value.");
+                } else {
+                    level = Integer.parseInt(levelField.getText());
+                }
+
+                Map<AbilityType, Integer> abilities = new HashMap<>();
+                for (AbilityType ability : AbilityType.values()) {
+                    JTextField abilityField = abilityFields.get(ability);
+                    if (abilityField.getText().isEmpty() || !abilityField.getText().matches("\\d+")) {
+                        throw new IllegalArgumentException(ability.toString() + " must be a numeric value.");
+                    } else {
+                        int score = Integer.parseInt(abilityField.getText());
+                        abilities.put(ability, score);
+                    }
+                }
+
+                managerApp.initCharacter(name, level, abilities);
+                switchToActionsPanelFromCreation();
+            } catch (IllegalArgumentException ex) {
+                // Show an error dialog or update an error message label
+                JOptionPane.showMessageDialog(characterCreationPanel, ex.getMessage(), "Input Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            managerApp.initCharacter(name, level, abilities);
-            switchToActionsPanelFromCreation();
         });
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BorderLayout());
+        JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.add(submitButton, BorderLayout.PAGE_END);
-
         return buttonPanel;
     }
 

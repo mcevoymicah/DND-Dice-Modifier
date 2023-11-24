@@ -37,8 +37,15 @@ public class ModifierManagerApp {
         }
     }
 
-
     // Buffs/Debuffs
+
+    // MODIFIES: this, character
+    // EFFECTS: Receives the details of a new buff or debuff and
+    // adds it to the character's active buffs/debuffs list.
+    public void addBuffDebuff(String name, AbilityType effectAbility, int effectMagnitude, int duration) {
+        BuffDebuff newBuffDebuff = new BuffDebuff(name, effectAbility, effectMagnitude, duration);
+        character.addBuffDebuff(newBuffDebuff);
+    }
 
     // Skills & Proficiencies
 
