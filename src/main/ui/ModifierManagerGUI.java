@@ -34,9 +34,9 @@ public class ModifierManagerGUI extends JFrame {
     private final Map<AbilityType, JTextField> abilityFields;
 
 
-    private final Color backgroundColor = new Color(198, 172, 143);
-    private final Color buttonColor = new Color(234, 224, 213);
-    private final Color textColor = new Color(38, 35, 31);
+    private final Color backgroundColor = new Color(217,220,214);
+    private final Color buttonColor = new Color(129,195,215);
+    private final Color textColor = new Color(22,66,91);
 
     public ModifierManagerGUI(ModifierManagerApp app) {
         super("D&D 5E Modifier Manager");
@@ -54,7 +54,6 @@ public class ModifierManagerGUI extends JFrame {
         setupInitialPanel();
         setupActionsPanel();
         setupCharacterCreationPanel();
-        setupPostLoadPanel();
 
         getContentPane().add(initialPanel, BorderLayout.CENTER); // Start with the initial panel
         setVisible(true);
@@ -90,7 +89,7 @@ public class ModifierManagerGUI extends JFrame {
         loadCharacterButton.addActionListener(e -> {
             boolean loadSuccess = managerApp.loadCharacter();
             if (loadSuccess) {
-                switchPanel(initialPanel, postLoadPanel);
+                switchPanel(initialPanel, actionsPanel);
             } else {
                 JOptionPane.showMessageDialog(null, "Failed to load character.");
             }
@@ -148,10 +147,10 @@ public class ModifierManagerGUI extends JFrame {
         levelField.setBackground(backgroundColor);
         levelField.setForeground(textColor);
 
-        ImageIcon imageIcon = new ImageIcon("images/pixilart-drawing.png"); // Replace with your image path
+        ImageIcon imageIcon = new ImageIcon("images/pixilart-drawing.png");
 
         JLabel imageLabel = new JLabel(imageIcon);
-        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // This line will center the image in the panel
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         leftPanel.add(Box.createVerticalGlue());
         leftPanel.add(createLabel("Name:"));
@@ -280,35 +279,6 @@ public class ModifierManagerGUI extends JFrame {
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
 
-    // Load Character Panel
-
-    // MODIFIES:
-    // EFFECTS: Loads a panel containing a message about whether character was loaded properly
-    //          and an option to return to the actions menu
-    private void setupPostLoadPanel() {
-        postLoadPanel.setLayout(new BoxLayout(postLoadPanel, BoxLayout.Y_AXIS));
-        postLoadPanel.setBackground(backgroundColor);
-        postLoadPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        JLabel loadMessageLabel = new JLabel("Character loaded from JSON", SwingConstants.CENTER);
-        loadMessageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        loadMessageLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        loadMessageLabel.setBackground(backgroundColor);
-        loadMessageLabel.setForeground(textColor);
-        loadMessageLabel.setName("loadMessageLabel"); // Set a name for the label to find it later
-
-        JButton mainMenuButton = createButton("Main Menu");
-        mainMenuButton.addActionListener(e -> switchToMainMenu());
-
-        postLoadPanel.add(Box.createVerticalGlue());
-        postLoadPanel.add(loadMessageLabel);
-        postLoadPanel.add(Box.createVerticalStrut(20));
-        postLoadPanel.add(mainMenuButton);
-        postLoadPanel.add(Box.createVerticalGlue());
-
-        postLoadPanel.setVisible(false);
-    }
-
     // Save Character Panel
 
     // EFFECTS: Asks the user if they would like to save their character before quitting.
@@ -320,6 +290,7 @@ public class ModifierManagerGUI extends JFrame {
         if (response == JOptionPane.YES_OPTION) {
             managerApp.saveCharacter();
         }
+        System.exit(0);
     }
 
     // EFFECTS: Removes the current panel and adds the specified panel.

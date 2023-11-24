@@ -18,9 +18,9 @@ class GamePanel extends JPanel {
     private ModifierManagerGUI managerUI;
 
 
-    private final Color backgroundColor = new Color(198, 172, 143);
-    private final Color buttonColor = new Color(234, 224, 213);
-    private final Color textColor = new Color(38, 35, 31);
+    private final Color backgroundColor = new Color(217,220,214);
+    private final Color buttonColor = new Color(129,195,215);
+    private final Color textColor = new Color(22,66,91);
 
 
     public GamePanel(ModifierManagerApp app, ModifierManagerGUI gui) {
