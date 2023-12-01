@@ -134,7 +134,6 @@ class GamePanel extends JPanel {
         managerUI.switchToActionsPanel();
     }
 
-
     // Skills
 
     // MODIFIES: this, character

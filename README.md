@@ -128,17 +128,17 @@ Character saved: karl
 ## Phase 4: Task 3
 
 Reflecting on the current design as depicted in the UML class diagram, one area that could benefit from 
-refactoring is the coupling between the `GameCharacter` class and the various aspects of character 
-management such as skill checks, buffs/debuffs application, and roll history. Currently, the `GameCharacter` 
-class is responsible for not only maintaining character state but also for implementing behavior that could 
+refactoring is the coupling between the `ModifierManagerGUI`, `ModifierManagerApp`, `GamePanel` classes
+and the various aspects of the manager such as skill checks, buffs/debuffs application, and roll history. 
+Currently, each class is responsible for implementing multiple behaviours that could 
 be more modular.
 
-In a future refactoring effort, I would aim to simplify the `GameCharacter` class. This class is currently 
-handling multiple responsibilities that could be more effectively managed if they were separated into different 
-classes. For instance, managing the character's skill checks and buff/debuff effects could be moved to separate 
-classes that specifically deal with these tasks. This change would make the `GameCharacter` class easier to 
-understand and modify. Although adding more classes could make the overall design a bit more complex, it 
-would ultimately lead to a cleaner and more organized codebase where each part has a clear purpose and is easier 
+In a future refactoring effort, I would aim to simplify the `ModifierManagerGUI`, `ModifierManagerApp`, `GamePanel` 
+classes. They're currently handling multiple responsibilities that could be more effectively managed if they 
+were separated into different classes. For instance, managing the character's skill checks and buff/debuff effects 
+could be moved to separate classes that specifically deal with these tasks. This change would make the 
+classes easier to understand and modify. Although adding more classes could make the overall design a bit more complex, 
+it would ultimately lead to a cleaner and more organized codebase where each part has a clear purpose and is easier 
 to manage independently.
 
 Moreover, this refactoring would reduce the risk of a single class becoming a "God Object" that is overly 
