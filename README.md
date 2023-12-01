@@ -95,3 +95,32 @@ red pixel dragon.
 
 - You can reload the state of my application by starting the application where you are then given the option to load 
 the previous character 
+
+## Phase 4: Task 2
+
+Fri Dec 01 00:58:35 PST 2023  
+GameCharacter created with name: karl and level: 10
+
+Fri Dec 01 00:58:44 PST 2023  
+Buff/Debuff added to karl: stronk (STRENGTH, 10, Duration: 1 rounds)
+
+Fri Dec 01 00:58:49 PST 2023  
+STRENGTH check rolled: 19
+
+Fri Dec 01 00:58:49 PST 2023  
+Buff/Debuff expired for karl: stronk
+
+Fri Dec 01 00:58:52 PST 2023  
+STRENGTH check rolled: 2
+
+Fri Dec 01 00:58:56 PST 2023  
+Skill check rolled for ATHLETICS: 14
+
+Fri Dec 01 00:59:02 PST 2023  
+Skill added to karl: ATHLETICS
+
+Fri Dec 01 00:59:10 PST 2023  
+Skill check rolled for ATHLETICS: 17
+
+Fri Dec 01 00:59:14 PST 2023  
+Character saved: karl

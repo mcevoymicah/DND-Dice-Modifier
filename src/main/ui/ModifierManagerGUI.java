@@ -7,6 +7,9 @@ import javax.swing.border.EmptyBorder;
 
 import model.*;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import java.util.*;
 
 // This class represents the main GUI for managing character modifiers in a Dungeons & Dragons 5th Edition game.
@@ -18,7 +21,6 @@ import java.util.*;
 //         View the character's details including ability scores, active buffs/debuffs, skills, and recent roll history
 //         Make skill and ability checks, simulating dice rolls with the option of manual input or automatic dice roll
 //         Save a character and load a previous character
-
 
 
 public class ModifierManagerGUI extends JFrame {
@@ -34,9 +36,9 @@ public class ModifierManagerGUI extends JFrame {
     private final Map<AbilityType, JTextField> abilityFields;
 
 
-    private final Color backgroundColor = new Color(217,220,214);
-    private final Color buttonColor = new Color(129,195,215);
-    private final Color textColor = new Color(22,66,91);
+    private final Color backgroundColor = new Color(217, 220, 214);
+    private final Color buttonColor = new Color(129, 195, 215);
+    private final Color textColor = new Color(22, 66, 91);
 
     // EFFECTS: runs the D&D Modifier Manager GUI
     public ModifierManagerGUI(ModifierManagerApp app) {
@@ -44,8 +46,15 @@ public class ModifierManagerGUI extends JFrame {
         this.managerApp = app;
         this.gamePanel = new GamePanel(managerApp, this);
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(400, 600);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                saveCharacter();
+            }
+        });
 
         nameField = new JTextField();
         levelField = new JTextField();
@@ -286,12 +295,24 @@ public class ModifierManagerGUI extends JFrame {
     private void saveCharacter() {
         int response = JOptionPane.showConfirmDialog(null,
                 "Would you like to save your character before quitting?",
-                "Save Character", JOptionPane.YES_NO_OPTION);
+                "Save Character", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
         if (response == JOptionPane.YES_OPTION) {
             managerApp.saveCharacter();
         }
-        System.exit(0);
+
+        printEventLog(); // Print the events before exiting
+        System.exit(0);  // Make sure this is the last line to exit the application
     }
+
+    // EFFECTS: Prints the events from the EventLog to the console
+    private void printEventLog() {
+        EventLog eventLog = EventLog.getInstance();
+        for (model.Event event : eventLog) {
+            System.out.println(event);
+        }
+    }
+
 
     // EFFECTS: Removes the current panel and adds the specified panel.
     private void switchPanel(JPanel panelToRemove, JPanel panelToAdd) {

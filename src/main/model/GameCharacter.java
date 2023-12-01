@@ -30,6 +30,11 @@ public class GameCharacter {
         for (AbilityType type : AbilityType.values()) {
             this.abilityScores.add(new AbilityScore(type, 10));
         }
+
+        // For logging
+
+        EventLog.getInstance().logEvent(new Event("GameCharacter created with name: "
+                + this.name + " and level: " + this.level));
     }
 
     // Getters
@@ -94,6 +99,8 @@ public class GameCharacter {
     // EFFECTS:  Adds the provided buff or debuff to the character's active list.
     public void addBuffDebuff(BuffDebuff buffOrDebuff) {
         activeBuffsDebuffs.add(buffOrDebuff);
+        EventLog.getInstance().logEvent(new Event("Buff/Debuff added to "
+                + this.name + ": " + buffOrDebuff.getDescription()));
     }
 
     // REQUIRES: buffOrDebuff to be in the activeBuffsDebuffs list
@@ -101,6 +108,8 @@ public class GameCharacter {
     // EFFECTS:  Removes the specified buff or debuff from the character's active list.
     public void removeBuffDebuff(BuffDebuff buffOrDebuff) {
         activeBuffsDebuffs.remove(buffOrDebuff);
+        EventLog.getInstance().logEvent(new Event("Buff/Debuff removed from "
+                + this.name + ": " + buffOrDebuff.getDescription()));
     }
 
     // MODIFIES: this
@@ -124,7 +133,11 @@ public class GameCharacter {
 
         // Remove buffs/debuffs with zero or negative duration
         for (BuffDebuff buffDebuff : toRemove) {
+
             activeBuffsDebuffs.remove(buffDebuff);
+
+            EventLog.getInstance().logEvent(new Event("Buff/Debuff expired for "
+                    + this.getName() + ": " + buffDebuff.getName()));
         }
     }
 
@@ -138,6 +151,8 @@ public class GameCharacter {
     // EFFECTS:  Adds the provided skill to the character's list of skills.
     public void addSkill(Skill skill) {
         skills.add(skill);
+        EventLog.getInstance().logEvent(new Event("Skill added to "
+                + this.name + ": " + skill.getType()));
     }
 
     // REQUIRES: skill to be in the skills list
@@ -145,6 +160,8 @@ public class GameCharacter {
     // EFFECTS:  Removes the specified skill from the character's list.
     public void removeSkill(Skill skill) {
         skills.remove(skill);
+        EventLog.getInstance().logEvent(new Event("Skill removed from "
+                + this.name + ": " + skill.getType()));
     }
 
     // REQUIRES: skillName to correspond to a known skill
@@ -166,6 +183,9 @@ public class GameCharacter {
     // EFFECTS:  Adds the provided roll to the character's roll history.
     public void addRoll(Roll roll) {
         rollHistory.addRoll(roll);
+
+        EventLog.getInstance().logEvent(new Event(roll.getType() + " roll added to "
+                + this.name + "'s history: " + roll.getFinalOutcome()));
     }
 
 

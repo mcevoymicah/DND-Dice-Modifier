@@ -92,6 +92,7 @@ public class ModifierManagerApp {
             BuffDebuff newBuffDebuff = new BuffDebuff(name, effectAbility, effectMagnitude, duration);
             character.addBuffDebuff(newBuffDebuff);
         }
+
     }
 
 
@@ -198,7 +199,12 @@ public class ModifierManagerApp {
         Roll newRoll = new Roll(chosenSkill.name() + " check", diceRoll, modifier);
         character.getRollHistory().addRoll(newRoll);
 
+        // Log this event
+        EventLog.getInstance().logEvent(new Event("Skill check rolled for "
+                + chosenSkill + ": " + totalResult));
+
         character.updateBuffsDebuffsDuration();
+
     }
 
 
@@ -213,6 +219,9 @@ public class ModifierManagerApp {
 
         Roll newRoll = new Roll(chosenAbility.name() + " check", diceRoll, modifier);
         character.getRollHistory().addRoll(newRoll);
+
+        EventLog.getInstance().logEvent(new Event(chosenAbility
+                + " check rolled: " + totalResult));
 
         character.updateBuffsDebuffsDuration();
     }
@@ -290,19 +299,35 @@ public class ModifierManagerApp {
             jsonWriter.close();
             JOptionPane.showMessageDialog(null,
                     "Saved " + character.getName() + " to " + JSON_STORE);
+
+            EventLog.getInstance().logEvent(new Event("Character saved: "
+                    + character.getName()));
+
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null,
                     "Unable to write to file: " + JSON_STORE);
+
+            EventLog.getInstance().logEvent(new Event("Failed to save character: "
+                    + character.getName()));
         }
     }
 
     public boolean loadCharacter() {
         try {
             character = jsonReader.read();
-            JOptionPane.showMessageDialog(null, "Loaded " + character.getName() + " from " + JSON_STORE);
+            JOptionPane.showMessageDialog(null, "Loaded " + character.getName() + " from "
+                    + JSON_STORE);
+
+            // Log the character load event
+            EventLog.getInstance().logEvent(new Event("Character loaded: " + character.getName()));
+
             return true;
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Unable to read from file: " + JSON_STORE);
+
+            // Log the character load error
+            EventLog.getInstance().logEvent(new Event("Failed to load character from file."));
+
             return false;
         }
     }
