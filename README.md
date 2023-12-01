@@ -124,3 +124,25 @@ Skill check rolled for ATHLETICS: 17
 
 Fri Dec 01 00:59:14 PST 2023  
 Character saved: karl
+
+## Phase 4: Task 3
+
+Reflecting on the current design as depicted in the UML class diagram, one area that could benefit from 
+refactoring is the coupling between the `GameCharacter` class and the various aspects of character 
+management such as skill checks, buffs/debuffs application, and roll history. Currently, the `GameCharacter` 
+class is responsible for not only maintaining character state but also for implementing behavior that could 
+be more modular.
+
+In a future refactoring effort, I would aim to simplify the `GameCharacter` class. This class is currently 
+handling multiple responsibilities that could be more effectively managed if they were separated into different 
+classes. For instance, managing the character's skill checks and buff/debuff effects could be moved to separate 
+classes that specifically deal with these tasks. This change would make the `GameCharacter` class easier to 
+understand and modify. Although adding more classes could make the overall design a bit more complex, it 
+would ultimately lead to a cleaner and more organized codebase where each part has a clear purpose and is easier 
+to manage independently.
+
+Moreover, this refactoring would reduce the risk of a single class becoming a "God Object" that is overly 
+complex and difficult to maintain. It would also enhance the Single Responsibility Principle by ensuring that 
+each class in the application has one reason to change. The refactoring is a tradeoff, as it would introduce 
+more classes to the system, which could increase complexity. However, the benefit of having a more maintainable, 
+scalable, and testable codebase justifies the tradeoff.
