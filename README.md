@@ -71,4 +71,4 @@ and the gaming experience more immersive.
    character to file and have the option to do so or not.
 
 10. **Load Character:**
-    - As a user, when I start the application, I want to be given the option to load my character from file.
+    - As a user, when I start the application, I want to be given the option to load my character from file,
