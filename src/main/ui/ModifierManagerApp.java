@@ -17,6 +17,8 @@ import java.io.*;
 // debuffs, skills, and proficiencies, supports rolling for checks and calculating modifiers
 // based on character abilities and active effects.
 
+
+
 public class ModifierManagerApp {
     private GameCharacter character;
     private static final String JSON_STORE = "./data/character.json";
@@ -331,5 +333,7 @@ public class ModifierManagerApp {
             return false;
         }
     }
+
+
 
 }
