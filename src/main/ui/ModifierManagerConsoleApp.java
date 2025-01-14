@@ -35,7 +35,7 @@ public class ModifierManagerConsoleApp {
                     break;
                 case "2":
                     running = false;
-                    System.out.println("Exiting... Goodbye!");
+                    System.out.println("Goodbye!");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -110,12 +110,27 @@ public class ModifierManagerConsoleApp {
     // MODIFIES: this
     // EFFECTS: Adds a buff or debuff to the character
     private void addBuffDebuff() {
-        System.out.print("Enter buff/debuff name: ");
-        String name = scanner.nextLine();
+        String name = getBuffDebuffName();
+        AbilityType abilityType = getAbilityTypeFromUser();
+        int magnitude = getEffectMagnitude();
+        int duration = getEffectDuration();
 
-        // Display available abilities
+        BuffDebuff buffDebuff = new BuffDebuff(name, abilityType, magnitude, duration);
+        character.addBuffDebuff(buffDebuff);
+        System.out.println("Buff/Debuff added successfully!");
+    }
+
+    // EFFECTS: Prompts/returns the name of the buff/debuff
+    private String getBuffDebuffName() {
+        System.out.print("Enter buff/debuff name: ");
+        return scanner.nextLine();
+    }
+
+    // EFFECTS: Prompts/returns the chosen AbilityType
+    private AbilityType getAbilityTypeFromUser() {
         AbilityType[] abilities = AbilityType.values();
         int abilityIndex = -1;
+
         while (abilityIndex < 0 || abilityIndex >= abilities.length) {
             System.out.println("Choose an ability:");
             for (int i = 0; i < abilities.length; i++) {
@@ -133,7 +148,11 @@ public class ModifierManagerConsoleApp {
             }
         }
 
-        // Get effect magnitude
+        return abilities[abilityIndex];
+    }
+
+    // EFFECTS: Prompts/returns the effect magnitude
+    private int getEffectMagnitude() {
         int magnitude = 0;
         while (magnitude == 0) {
             System.out.print("Enter effect magnitude (e.g., +2 or -3): ");
@@ -143,8 +162,11 @@ public class ModifierManagerConsoleApp {
                 System.out.println("Invalid input. Please enter a valid number.");
             }
         }
+        return magnitude;
+    }
 
-        // Get duration
+    // EFFECTS: Prompts/returns the duration of the buff/debuff
+    private int getEffectDuration() {
         int duration = -1;
         while (duration < 0) {
             System.out.print("Enter duration (in turns): ");
@@ -157,27 +179,37 @@ public class ModifierManagerConsoleApp {
                 System.out.println("Invalid input. Please enter a valid number.");
             }
         }
-
-        // Create and add the buff/debuff
-        BuffDebuff buffDebuff = new BuffDebuff(name, abilities[abilityIndex], magnitude, duration);
-        character.addBuffDebuff(buffDebuff);
-        System.out.println("Buff/Debuff added successfully!");
-
-        // Display all active buffs
-        System.out.println("\nActive Buffs/Debuffs:");
-        for (BuffDebuff buff : character.getActiveBuffsDebuffs()) {
-            System.out.println("- " + buff.getDescription());
-        }
+        return duration;
     }
-
 
     // MODIFIES: this
     // EFFECTS: Defines skills and proficiencies for the character
     private void defineSkillsAndProficiencies() {
+        SkillType chosenSkill = chooseSkill();
+        boolean isProficient = askProficiency();
+        AbilityType associatedAbilityType = Skill.getAssociatedAbilityBySkill(chosenSkill);
+        AbilityScore associatedAbility = character.getAbilityScoreByType(associatedAbilityType);
+
+        if (associatedAbility == null) {
+            System.out.println("Error: Associated ability not found for this skill.");
+            return;
+        }
+
+        // Create and add the skill
+        Skill skill = new Skill(chosenSkill, associatedAbility, isProficient);
+        character.addSkill(skill);
+
+        // Give feedback when a skill is successfully added
+        int proficiencyBonus = 1 + (character.getLevel() + 3) / 4;
+        System.out.println("Skill added successfully!");
+        System.out.println(skill.describeSkill() + " (Proficiency Bonus: " + proficiencyBonus + ")");
+    }
+
+    // EFFECTS: Displays available skills, returns the chosen SkillType
+    private SkillType chooseSkill() {
         SkillType[] skills = SkillType.values();
         int skillIndex = -1;
 
-        // Display available skills
         while (skillIndex < 0 || skillIndex >= skills.length) {
             System.out.println("Available Skills:");
             for (int i = 0; i < skills.length; i++) {
@@ -195,38 +227,23 @@ public class ModifierManagerConsoleApp {
             }
         }
 
-        // Ask about proficiency
-        boolean isProficient = false;
+        return skills[skillIndex];
+    }
+
+    /// EFFECTS: Confirms if the character is proficient in the skill; returns true if proficient
+    private boolean askProficiency() {
         while (true) {
             System.out.print("Is the character proficient in this skill? (yes/no): ");
             String proficiencyInput = scanner.nextLine().trim().toLowerCase();
             if (proficiencyInput.equals("yes")) {
-                isProficient = true;
-                break;
+                return true;
             } else if (proficiencyInput.equals("no")) {
-                break;
+                return false;
             } else {
                 System.out.println("Invalid input. Please enter 'yes' or 'no'.");
             }
         }
-
-        // Get the chosen skill and associated ability
-        SkillType chosenSkill = skills[skillIndex];
-        AbilityType associatedAbilityType = Skill.getAssociatedAbilityBySkill(chosenSkill);
-        AbilityScore associatedAbility = character.getAbilityScoreByType(associatedAbilityType);
-
-        // Calculate proficiency bonus based on character level
-        int proficiencyBonus = 1 + (character.getLevel() + 3) / 4;
-
-        // Add skill to character
-        Skill skill = new Skill(chosenSkill, associatedAbility, isProficient);
-        character.addSkill(skill);
-
-        // Provide feedback
-        System.out.println("Skill added successfully!");
-        System.out.println(skill.describeSkill() + " (Proficiency Bonus: " + proficiencyBonus + ")");
     }
-
 
 
     // EFFECTS: Displays character details
@@ -272,19 +289,60 @@ public class ModifierManagerConsoleApp {
         System.out.print("Choose an option: ");
         String choice = scanner.nextLine();
 
-        if (choice.equals("1")) {
-            rollForSkill();
-        } else if (choice.equals("2")) {
-            rollForAbility();
-        } else {
-            System.out.println("Invalid option.");
+        switch (choice) {
+            case "1":
+                rollForSkill();
+                break;
+            case "2":
+                rollForAbility();
+                break;
+            default:
+                System.out.println("Invalid option.");
         }
     }
 
+    // EFFECTS: Rolls a 20-sided die and returns the result
+    private int rollDice() {
+        return (int) (Math.random() * 19) + 1;
+    }
 
 
-    // EFFECTS: Rolls for a skill, whether the character is proficient or not
+    // EFFECTS: Calculates the total buff/debuff modifier for the given ability
+    private int calculateBuffDebuffModifier(AbilityType abilityType) {
+        int buffDebuffModifier = 0;
+        for (BuffDebuff buffDebuff : character.getActiveBuffsDebuffs()) {
+            if (buffDebuff.getEffectAbility() == abilityType) {
+                buffDebuffModifier += buffDebuff.getEffectMagnitude();
+            }
+        }
+        return buffDebuffModifier;
+    }
+
+    // EFFECTS: Rolls for a skill
     private void rollForSkill() {
+        SkillType chosenSkillType = promptSkillSelection();
+        if (chosenSkillType == null) {
+            return;
+        }
+
+        AbilityType associatedAbilityType = Skill.getAssociatedAbilityBySkill(chosenSkillType);
+        AbilityScore associatedAbility = character.getAbilityScoreByType(associatedAbilityType);
+
+        int proficiencyBonus = calculateProficiencyBonus(chosenSkillType);
+        int buffDebuffModifier = calculateBuffDebuffModifier(associatedAbilityType);
+        int rollValue = rollDice();
+        int totalModifier = associatedAbility.getModifier() + proficiencyBonus + buffDebuffModifier;
+        Roll roll = new Roll(chosenSkillType + " check", rollValue, totalModifier);
+
+        displaySkillRollDetails(
+                chosenSkillType, rollValue, associatedAbility, proficiencyBonus, buffDebuffModifier, totalModifier);
+
+        character.addRoll(roll);
+        character.updateBuffsDebuffsDuration();
+    }
+
+    // EFFECTS: Returns the chosen SkillType or null if invalid input
+    private SkillType promptSkillSelection() {
         System.out.println("Available Skills:");
         SkillType[] skillTypes = SkillType.values();
         for (int i = 0; i < skillTypes.length; i++) {
@@ -292,63 +350,63 @@ public class ModifierManagerConsoleApp {
         }
 
         System.out.print("Choose a skill by number: ");
-        int skillIndex;
         try {
-            skillIndex = Integer.parseInt(scanner.nextLine()) - 1;
+            int skillIndex = Integer.parseInt(scanner.nextLine()) - 1;
+            if (skillIndex >= 0 && skillIndex < skillTypes.length) {
+                return skillTypes[skillIndex];
+            } else {
+                System.out.println("Invalid skill choice. Please try again.");
+            }
         } catch (NumberFormatException e) {
             System.out.println("Invalid input. Please enter a valid number.");
-            return;
         }
 
-        if (skillIndex < 0 || skillIndex >= skillTypes.length) {
-            System.out.println("Invalid skill choice. Please try again.");
-            return;
-        }
+        return null;
+    }
 
-        SkillType chosenSkillType = skillTypes[skillIndex];
-        AbilityType associatedAbilityType = Skill.getAssociatedAbilityBySkill(chosenSkillType);
-        AbilityScore associatedAbility = character.getAbilityScoreByType(associatedAbilityType);
-
-        // Check proficiency
-        boolean isProficient = character.isProficientInSkill(chosenSkillType);
+    // EFFECTS: Returns proficiency bonus for skill based on the character's level
+    private int calculateProficiencyBonus(SkillType skillType) {
+        boolean isProficient = character.isProficientInSkill(skillType);
         int proficiencyBonus = isProficient ? 1 + (character.getLevel() + 3) / 4 : 0;
+        return proficiencyBonus;
+    }
 
-        // Calculate buffs/debuffs modifier
-        int buffDebuffModifier = 0;
-        for (BuffDebuff buffDebuff : character.getActiveBuffsDebuffs()) {
-            if (buffDebuff.getEffectAbility() == associatedAbilityType) {
-                buffDebuffModifier += buffDebuff.getEffectMagnitude();
-            }
-        }
-
-        // Roll a 20-sided die
-        int rollValue = (int) (Math.random() * 20) + 1;
-
-        // Calculate the total modifier
-        int totalModifier = associatedAbility.getModifier() + proficiencyBonus + buffDebuffModifier;
-
-        // Create a Roll object
-        Roll roll = new Roll(chosenSkillType + " check", rollValue, totalModifier);
-
-        // Display the roll details
+    // EFFECTS: Displays the details of the roll
+    private void displaySkillRollDetails(SkillType skill, int rollValue, AbilityScore ability, int proficiencyBonus,
+                                    int buffDebuffModifier, int totalResult) {
         System.out.println("\nRoll Result:");
-        System.out.println("Skill: " + chosenSkillType);
+        System.out.println("Skill: " + skill);
         System.out.println("Base Roll: " + rollValue);
-        System.out.println("Ability Modifier: " + associatedAbility.getModifier());
+        System.out.println("Ability Modifier: " + ability.getModifier());
         System.out.println("Proficiency Bonus: " + proficiencyBonus);
         System.out.println("Buff/Debuff Modifier: " + buffDebuffModifier);
-        System.out.println("Total Result: " + roll.getFinalOutcome());
-
-        // Add the roll to the character's roll history
-        character.addRoll(roll);
-
-        // Update buffs and debuffs
-        character.updateBuffsDebuffsDuration();
+        System.out.println("Total Result: " + totalResult);
     }
 
 
-    // EFFECTS: Rolls for an ability and displays the result
+    // EFFECTS: Rolls for an ability
     private void rollForAbility() {
+        AbilityType chosenAbility = promptAbilitySelection();
+        if (chosenAbility == null) {
+            return;
+        }
+
+        AbilityScore abilityScore = character.getAbilityScoreByType(chosenAbility);
+
+        int buffDebuffModifier = calculateBuffDebuffModifier(chosenAbility);
+        int rollValue = rollDice();
+        int totalModifier = abilityScore.getModifier() + buffDebuffModifier;
+        Roll roll = new Roll(chosenAbility.toString() + " check", rollValue, totalModifier);
+
+        displayAbilityRollDetails(
+                chosenAbility, rollValue, abilityScore, buffDebuffModifier, totalModifier);
+
+        character.addRoll(roll);
+        character.updateBuffsDebuffsDuration();
+    }
+
+    // EFFECTS: Prompts the user to select an ability and returns the chosen AbilityType, or null if invalid input
+    private AbilityType promptAbilitySelection() {
         System.out.println("Available Abilities:");
         AbilityType[] abilities = AbilityType.values();
         for (int i = 0; i < abilities.length; i++) {
@@ -356,57 +414,29 @@ public class ModifierManagerConsoleApp {
         }
 
         System.out.print("Choose an ability by number: ");
-        int abilityIndex;
         try {
-            abilityIndex = Integer.parseInt(scanner.nextLine()) - 1;
+            int abilityIndex = Integer.parseInt(scanner.nextLine()) - 1;
+            if (abilityIndex >= 0 && abilityIndex < abilities.length) {
+                return abilities[abilityIndex];
+            } else {
+                System.out.println("Invalid ability choice. Please try again.");
+            }
         } catch (NumberFormatException e) {
             System.out.println("Invalid input. Please enter a number.");
-            return;
         }
 
-        if (abilityIndex < 0 || abilityIndex >= abilities.length) {
-            System.out.println("Invalid ability choice. Please try again.");
-            return;
-        }
+        return null;
+    }
 
-        AbilityType chosenAbility = abilities[abilityIndex];
-
-        // Fetch ability score
-        AbilityScore abilityScore = character.getAbilityScoreByType(chosenAbility);
-        if (abilityScore == null) {
-            System.out.println("Error: Ability score for " + chosenAbility + " not found.");
-            return;
-        }
-
-        // Calculate buffs/debuffs modifier
-        int buffDebuffModifier = 0;
-        for (BuffDebuff buffDebuff : character.getActiveBuffsDebuffs()) {
-            if (buffDebuff.getEffectAbility() == chosenAbility) {
-                buffDebuffModifier += buffDebuff.getEffectMagnitude();
-            }
-        }
-
-        // Roll a 20-sided die
-        int rollValue = (int) (Math.random() * 20) + 1;
-
-        // Calculate the total modifier
-        int totalModifier = abilityScore.getModifier() + buffDebuffModifier;
-
-        // Create a Roll object
-        Roll roll = new Roll(chosenAbility.toString() + " check", rollValue, totalModifier);
-
-        // Display the roll details
+    // EFFECTS: Displays the details of the roll for the ability
+    private void displayAbilityRollDetails(AbilityType ability, int rollValue, AbilityScore abilityScore,
+                                           int buffDebuffModifier, int totalResult) {
         System.out.println("\nRoll Result:");
-        System.out.println("Ability: " + chosenAbility);
+        System.out.println("Ability: " + ability);
         System.out.println("Base Roll: " + rollValue);
         System.out.println("Ability Modifier: " + abilityScore.getModifier());
         System.out.println("Buff/Debuff Modifier: " + buffDebuffModifier);
-        System.out.println("Total Result: " + roll.getFinalOutcome());
-
-        // Add the roll to the character's roll history
-        character.addRoll(roll);
-
-        // Update buffs and debuffs
-        character.updateBuffsDebuffsDuration();
+        System.out.println("Total Result: " + totalResult);
     }
+
 }
